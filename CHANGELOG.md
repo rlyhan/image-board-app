@@ -1,3 +1,7 @@
+## [0.3.0] - 2025-11-10
+### Added
+- Lazy load Pexels images
+
 ## [0.2.0] - 2025-11-10
 ### Added
 - Pull in data from Pexels
