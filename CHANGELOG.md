@@ -1,3 +1,7 @@
+## [0.5.0] - 2025-11-10
+### Added
+- Search functionality
+
 ## [0.4.0] - 2025-11-10
 ### Changed
 - Masonry style for gallery

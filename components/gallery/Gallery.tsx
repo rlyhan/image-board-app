@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { PexelImage } from "@/lib/types";
 import GalleryImage from "./GalleryImage";
+import GallerySearch from "./GallerySearch";
 
 type GalleryProps = {
     initialPhotos: PexelImage[];
+    includeSearch?: boolean;
 };
 
-export default function Gallery({ initialPhotos }: GalleryProps) {
+export default function Gallery({ initialPhotos, includeSearch }: GalleryProps) {
     const [photos, setPhotos] = useState<PexelImage[]>(initialPhotos);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -28,6 +30,13 @@ export default function Gallery({ initialPhotos }: GalleryProps) {
         }
     };
 
+    // Search for images
+    const handleSearch = async (query: string) => {
+        const res = await fetch(`/api/pexels/search?query=${query}`);
+        const data = await res.json();
+        setPhotos(data.photos);
+    };
+
     // Intersection Observer
     useEffect(() => {
         if (!sentinelRef.current) return;
@@ -42,12 +51,17 @@ export default function Gallery({ initialPhotos }: GalleryProps) {
     }, [sentinelRef.current, loading]);
 
     return (
-        <div className="p-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[12px] max-w-[1500px] mx-auto">
-            {photos.map((photo) => (
-                <GalleryImage key={photo.id} photo={photo} />
-            ))}
-            <div ref={sentinelRef} className="h-10" />
-            {loading && <p className="col-span-full text-center">Loading...</p>}
+        <div className="max-w-[1500px] mx-auto">
+            {includeSearch && (
+                <GallerySearch onSearch={handleSearch} />
+            )}
+            <div className="p-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[12px]">
+                {photos.map((photo) => (
+                    <GalleryImage key={photo.id} photo={photo} />
+                ))}
+                <div ref={sentinelRef} className="h-10" />
+                {loading && <p className="col-span-full text-center">Loading...</p>}
+            </div>
         </div>
     );
 }

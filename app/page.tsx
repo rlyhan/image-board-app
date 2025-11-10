@@ -9,7 +9,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      {Array.isArray(photos) && photos.length > 0 && <Gallery initialPhotos={photos} />}
+      {Array.isArray(photos) && photos.length > 0 && <Gallery initialPhotos={photos} includeSearch={true} />}
     </main>
   );
 }
