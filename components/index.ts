@@ -1,3 +1,5 @@
+import { ButtonLink } from './common';
 import { Gallery, GalleryImage } from './gallery';
+import { MainNav } from './navigation';
 
-export { Gallery, GalleryImage }
+export { ButtonLink, Gallery, GalleryImage, MainNav }

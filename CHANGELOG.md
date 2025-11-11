@@ -1,3 +1,9 @@
+## [0.6.0] - 2025-11-11
+### Added
+- Add Auth0
+### Changed
+- Downgrade Next.js to 15.1.6 to accomodate Next.js Auth0 package
+
 ## [0.5.0] - 2025-11-10
 ### Added
 - Search functionality
