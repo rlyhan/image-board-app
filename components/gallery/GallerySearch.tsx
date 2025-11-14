@@ -17,7 +17,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
     return (
         <form
             onSubmit={handleSubmit}
-            className="w-full mx-auto flex items-center p-8"
+            className="w-full mx-auto flex items-center py-8"
         >
             <input
                 type="text"

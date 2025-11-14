@@ -1,4 +1,4 @@
-import { ButtonLink } from "../common";
+import { ButtonLink, NavLink } from "../common";
 
 type MainNavProps = {
     isAuthenticated?: boolean;
@@ -11,7 +11,10 @@ export default function MainNav({ isAuthenticated = false }: MainNavProps) {
                 <a href="/" className="text-2xl block self-center">Image Board App</a>
                 <ul className="flex gap-2">
                     {isAuthenticated ?
-                        (<ButtonLink href="/auth/logout" label="Log Out" />) :
+                        (<>
+                            <NavLink href="/dashboard" label="Dashboard" />
+                            <ButtonLink href="/auth/logout" label="Log Out" />
+                        </>) :
                         (<ButtonLink href="/auth/login" label="Log In" />)}
                 </ul>
             </nav>

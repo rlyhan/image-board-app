@@ -51,11 +51,11 @@ export default function Gallery({ initialPhotos, includeSearch }: GalleryProps) 
     }, [sentinelRef.current, loading]);
 
     return (
-        <div className="max-w-[1500px] mx-auto">
+        <div>
             {includeSearch && (
                 <GallerySearch onSearch={handleSearch} />
             )}
-            <div className="p-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[12px]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[12px]">
                 {photos.map((photo) => (
                     <GalleryImage key={photo.id} photo={photo} />
                 ))}

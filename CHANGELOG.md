@@ -1,3 +1,7 @@
+## [0.7.0] - 2025-11-12
+### Added
+- Dashboard page
+
 ## [0.6.0] - 2025-11-11
 ### Added
 - Add Auth0
