@@ -21,3 +21,9 @@ export type PexelImage = {
     url?: string;
     avg_color?: string;
 };
+
+export interface FavouriteDocument {
+    _id?: string;            // MongoDB autogenerates this
+    auth0Id: string;         // user.sub from Auth0
+    images: PexelImage[];        // list of favourite images
+}

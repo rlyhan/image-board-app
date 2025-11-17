@@ -1,10 +1,26 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Container, Gallery } from "@/components";
+import { getFavourites } from "@/lib/api/favourites";
+import { PexelImage } from "@/lib/types";
 
 export default function DashboardPage() {
     const { user, error, isLoading } = useUser();
+    const [favourites, setFavourites] = useState<PexelImage[]>([]);
+
+    useEffect(() => {
+        async function load() {
+            try {
+                const favs = await getFavourites();
+                setFavourites(favs);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        load();
+    }, []);
 
     if (isLoading) {
         return (
@@ -43,6 +59,7 @@ export default function DashboardPage() {
                 <h2 className="text-2xl font-semibold mb-1">{user.name}</h2>
                 <p className="text-gray-600 dark:text-gray-300">{user.email}</p>
             </div>
+            {favourites?.length && <Gallery initialPhotos={favourites} disableLoadMore />}
         </Container>
     );
 }

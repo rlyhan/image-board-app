@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchFromPexels } from "@/lib/pexels";
+import { fetchPhotos, searchPhotos } from "@/lib/pexels";
 
 export async function GET(req: NextRequest) {
-    const url = new URL(req.url);
-    const page = url.searchParams.get("page") || "1";
-    const per_page = url.searchParams.get("per_page") || "12";
+    const page = Number(req.nextUrl.searchParams.get("page") || 1);
+    const per_page = Number(req.nextUrl.searchParams.get("per_page") || 12);
+    const query = req.nextUrl.searchParams.get("query") || undefined;
 
-    const data = await fetchFromPexels("curated", { page, per_page });
-    return NextResponse.json(data);
+    let photos;
+    try {
+        photos = query
+            ? await searchPhotos(query, per_page)
+            : await fetchPhotos(page, per_page);
+    } catch (err: any) {
+        return NextResponse.json({ error: err.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ photos });
 }
