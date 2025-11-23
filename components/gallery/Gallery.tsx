@@ -2,44 +2,43 @@
 
 import { useEffect, useRef, useState } from "react";
 import { PexelImage } from "@/lib/types";
+import { getCuratedPhotos, searchPhotos } from "@/lib/api/pexels";
 import GalleryImage from "./GalleryImage";
 import GallerySearch from "./GallerySearch";
 
 type GalleryProps = {
     initialPhotos: PexelImage[];
     includeSearch?: boolean;
+    disableLoadMore?: boolean;
 };
 
-export default function Gallery({ initialPhotos, includeSearch }: GalleryProps) {
+export default function Gallery({ initialPhotos, includeSearch, disableLoadMore }: GalleryProps) {
     const [photos, setPhotos] = useState<PexelImage[]>(initialPhotos);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-    // Fetch next page
     const loadMore = async () => {
-        if (loading) return;
+        if (loading || disableLoadMore) return;
         setLoading(true);
         try {
-            const res = await fetch(`/api/pexels?page=${page + 1}&per_page=12`);
-            const data = await res.json();
-            setPhotos((prev) => [...prev, ...data.photos]);
+            const newPhotos = await getCuratedPhotos(page + 1, 12);
+            setPhotos((prev) => [...prev, ...newPhotos]);
             setPage((prev) => prev + 1);
         } finally {
             setLoading(false);
         }
     };
 
-    // Search for images
     const handleSearch = async (query: string) => {
-        const res = await fetch(`/api/pexels/search?query=${query}`);
-        const data = await res.json();
-        setPhotos(data.photos);
+        if (disableLoadMore) return;
+        const results = await searchPhotos(query);
+        setPhotos(results);
     };
 
     // Intersection Observer
     useEffect(() => {
-        if (!sentinelRef.current) return;
+        if (!sentinelRef.current || disableLoadMore) return;
 
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) loadMore();
@@ -48,18 +47,18 @@ export default function Gallery({ initialPhotos, includeSearch }: GalleryProps) 
         observer.observe(sentinelRef.current);
 
         return () => observer.disconnect();
-    }, [sentinelRef.current, loading]);
+    }, [sentinelRef.current, loading, disableLoadMore]);
 
     return (
         <div>
-            {includeSearch && (
+            {includeSearch && !disableLoadMore && (
                 <GallerySearch onSearch={handleSearch} />
             )}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[12px]">
                 {photos.map((photo) => (
                     <GalleryImage key={photo.id} photo={photo} />
                 ))}
-                <div ref={sentinelRef} className="h-10" />
+                {!disableLoadMore && <div ref={sentinelRef} className="h-10" />}
                 {loading && <p className="col-span-full text-center">Loading...</p>}
             </div>
         </div>

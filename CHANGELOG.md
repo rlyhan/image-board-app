@@ -1,3 +1,12 @@
+## [0.8.0] - 2025-11-17
+### Added
+- MongoDB configuration
+- Add to favourites functionality
+- Button components
+### Changed
+- Refactor Pexels API route
+- Refactor components
+
 ## [0.7.0] - 2025-11-12
 ### Added
 - Dashboard page
