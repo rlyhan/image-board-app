@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { getFavourites } from "@/lib/api/favourites";
 import { PexelImage } from "@/lib/types";
 
@@ -13,11 +14,13 @@ type FavouritesContextType = {
 const FavouritesContext = createContext<FavouritesContextType | undefined>(undefined);
 
 export function FavouritesProvider({ children }: { children: ReactNode }) {
+    const { user } = useUser();
     const [favourites, setFavourites] = useState<PexelImage[]>([]);
 
     useEffect(() => {
         async function loadFavourites() {
             try {
+                if (!user) return;
                 const favs = await getFavourites();
                 setFavourites(favs);
             } catch (err) {

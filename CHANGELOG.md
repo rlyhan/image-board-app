@@ -1,3 +1,7 @@
+## [0.8.1] - 2025-11-23
+### Fixed
+- Stop calling to favourites without authentication
+
 ## [0.8.0] - 2025-11-17
 ### Added
 - MongoDB configuration

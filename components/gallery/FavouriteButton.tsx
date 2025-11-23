@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { addToFavourites, removeFromFavourites } from "@/lib/api/favourites";
 import { PexelImage } from "@/lib/types";
 import { Button } from "@/components";
@@ -11,6 +12,7 @@ type FavouriteButtonProps = {
 };
 
 export default function FavouriteButton({ image }: FavouriteButtonProps) {
+    const { user } = useUser();
     const { setFavourites, isFavourite } = useFavourites();
     const [loading, setLoading] = useState(false);
     const [buttonLabel, setButtonLabel] = useState("");
@@ -22,6 +24,11 @@ export default function FavouriteButton({ image }: FavouriteButtonProps) {
     }, [currentlyFavourite]);
 
     async function toggleFavourite() {
+        if (!user) {
+            alert("Please login.");
+            return;
+        }
+
         setLoading(true);
         try {
             if (currentlyFavourite) {
