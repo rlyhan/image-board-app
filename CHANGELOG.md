@@ -1,3 +1,7 @@
+## [0.8.3] - 2025-11-24
+### Fixed
+- Remove favourite button not showing on favourited items
+
 ## [0.8.2] - 2025-11-24
 ### Changed
 - Container component additional classes

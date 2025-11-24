@@ -14,12 +14,13 @@ type FavouritesContextType = {
 const FavouritesContext = createContext<FavouritesContextType | undefined>(undefined);
 
 export function FavouritesProvider({ children }: { children: ReactNode }) {
-    const { user } = useUser();
+    const { user, isLoading } = useUser();
     const [favourites, setFavourites] = useState<PexelImage[]>([]);
 
     useEffect(() => {
         async function loadFavourites() {
             try {
+                if (isLoading) return;
                 if (!user) return;
                 const favs = await getFavourites();
                 setFavourites(favs);
@@ -29,7 +30,7 @@ export function FavouritesProvider({ children }: { children: ReactNode }) {
         }
 
         loadFavourites();
-    }, []);
+    }, [user, isLoading]);
 
     const isFavourite = (imageId: number) => favourites.some((img) => img.id === imageId);
 
