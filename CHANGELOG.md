@@ -1,3 +1,7 @@
+## [0.8.5] - 2025-11-24
+### Fixed
+- Use NEXT_PUBLIC_BASE_URL as primary fetch base url for Pexels
+
 ## [0.8.4] - 2025-11-24
 ### Fixed
 - Use correct environment variable for base url

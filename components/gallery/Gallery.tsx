@@ -28,7 +28,6 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
         } finally {
             setLoading(false);
         }
-        if (loading || disableLoadMore) return;
     }, [loading, page, disableLoadMore]);
 
     const handleSearch = async (query: string) => {

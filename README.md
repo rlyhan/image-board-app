@@ -11,7 +11,7 @@ Create a .env.local file with the following:
 
 ```bash
 PEXELS_API_KEY=your-api-key
-NEXT_PUBLIC_URL=http://localhost:3000
+APP_BASE_URL=http://localhost:3000
 AUTH0_BASE_URL=http://localhost:3000
 AUTH0_DOMAIN=https://your-tenant.auth0.com
 AUTH0_CLIENT_ID=your-client-id

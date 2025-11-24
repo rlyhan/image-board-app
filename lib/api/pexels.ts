@@ -1,6 +1,6 @@
 import { PexelImage } from "../types";
 
-const baseUrl = process.env.APP_BASE_URL || 'http://localhost:3000';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.APP_BASE_URL || 'http://localhost:3000';
 
 export async function getCuratedPhotos(page: number = 1, perPage: number = 12): Promise<PexelImage[]> {
     const res = await fetch(`${baseUrl}/api/pexels?page=${page}&per_page=${perPage}`);
