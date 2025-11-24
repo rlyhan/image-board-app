@@ -1,3 +1,10 @@
+## [0.8.2] - 2025-11-24
+### Changed
+- Container component additional classes
+- Gallery grid responsiveness
+### Fixed
+- Dashboard layout shift
+
 ## [0.8.1] - 2025-11-23
 ### Fixed
 - Stop calling to favourites without authentication

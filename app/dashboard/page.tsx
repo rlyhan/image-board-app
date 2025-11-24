@@ -24,7 +24,7 @@ export default function DashboardPage() {
 
     if (isLoading) {
         return (
-            <Container flex>
+            <Container>
                 <p className="text-gray-500">Loading your profile...</p>
             </Container>
         );
@@ -32,7 +32,7 @@ export default function DashboardPage() {
 
     if (error) {
         return (
-            <Container flex>
+            <Container>
                 <p className="text-red-500">Error: {error.message}</p>
             </Container>
         );
@@ -40,15 +40,15 @@ export default function DashboardPage() {
 
     if (!user) {
         return (
-            <Container flex>
+            <Container>
                 <p className="text-gray-600">No user information available.</p>
             </Container>
         );
     }
 
     return (
-        <Container flex>
-            <div>
+        <Container>
+            <div className="mb-4">
                 {user.picture && (
                     <img
                         src={user.picture}
@@ -59,7 +59,7 @@ export default function DashboardPage() {
                 <h2 className="text-2xl font-semibold mb-1">{user.name}</h2>
                 <p className="text-gray-600 dark:text-gray-300">{user.email}</p>
             </div>
-            {favourites?.length && <Gallery initialPhotos={favourites} disableLoadMore />}
+            {favourites?.length ? (<Gallery initialPhotos={favourites} disableLoadMore />) : <></>}
         </Container>
     );
 }

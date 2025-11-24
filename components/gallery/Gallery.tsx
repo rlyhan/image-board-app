@@ -50,11 +50,11 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
     }, [sentinelRef.current, loading, disableLoadMore]);
 
     return (
-        <div>
+        <div className="mb-10">
             {includeSearch && !disableLoadMore && (
                 <GallerySearch onSearch={handleSearch} />
             )}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[12px]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[12px]">
                 {photos.map((photo) => (
                     <GalleryImage key={photo.id} photo={photo} />
                 ))}

@@ -3,14 +3,14 @@ import cn from "classnames";
 
 type ContainerProps = {
     children: ReactNode;
-    flex?: boolean;
+    additionalClasses?: string;
 };
 
-export default function Container({ children, flex }: ContainerProps) {
+export default function Container({ children, additionalClasses }: ContainerProps) {
     return (
         <div
             className={cn("max-w-[1500px] mx-auto px-8", {
-                "flex gap-4": flex,
+                additionalClasses
             })}
         >
             {children}
