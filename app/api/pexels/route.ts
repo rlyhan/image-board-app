@@ -16,5 +16,13 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: message }, { status: 500 });
     }
 
-    return NextResponse.json({ photos });
+    const res = NextResponse.json({ photos });
+    res.headers.set(
+        "Access-Control-Allow-Origin",
+        process.env.NEXT_PUBLIC_BASE_URL || "*"
+    );
+    res.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.headers.set("Access-Control-Allow-Headers", "Content-Type");
+
+    return res;
 }

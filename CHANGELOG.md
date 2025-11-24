@@ -1,3 +1,7 @@
+## [0.8.6] - 2025-11-24
+### Fixed
+- CORS for Pexels call
+
 ## [0.8.5] - 2025-11-24
 ### Fixed
 - Use NEXT_PUBLIC_BASE_URL as primary fetch base url for Pexels
