@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type ButtonLinkProps = {
     href: string;
     label: string;
@@ -10,11 +12,11 @@ const buttonStyles = {
 
 export default function ButtonLink({ href, label, className }: ButtonLinkProps) {
     return (
-        <a
+        <Link
             href={href}
             className={className ?? buttonStyles.standard}
         >
             {label}
-        </a>
+        </Link>
     );
 }

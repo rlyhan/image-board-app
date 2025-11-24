@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type NavLinkProps = {
     href: string;
     label: string;
@@ -10,11 +12,11 @@ const buttonStyles = {
 
 export default function NavLink({ href, label, className }: NavLinkProps) {
     return (
-        <a
+        <Link
             href={href}
             className={className ?? buttonStyles.standard}
         >
             {label}
-        </a>
+        </Link>
     );
 }

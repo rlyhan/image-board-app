@@ -1,3 +1,14 @@
+## [0.8.4] - 2025-11-24
+### Fixed
+- Use correct environment variable for base url
+- Use correct Auth0 base url environment variable name
+- Remove NEXT_PUBLIC_BASE_URL from Pexels API call
+### Changed
+- Image and link optimisations for Next.js
+- Eliminate 'any' types
+- Add Google to allowed image hosts
+- Hook optimisations
+
 ## [0.8.3] - 2025-11-24
 ### Fixed
 - Remove favourite button not showing on favourited items

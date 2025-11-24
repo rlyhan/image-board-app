@@ -11,8 +11,9 @@ export async function GET(req: NextRequest) {
         photos = query
             ? await searchPhotos(query, per_page)
             : await fetchPhotos(page, per_page);
-    } catch (err: any) {
-        return NextResponse.json({ error: err.message }, { status: 500 });
+    } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 
     return NextResponse.json({ photos });

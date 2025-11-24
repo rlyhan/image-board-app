@@ -21,9 +21,10 @@ export async function GET(req: NextRequest) {
         const doc = await favourites.findOne({ auth0Id: session.user.sub });
 
         return NextResponse.json(doc?.images || []);
-    } catch (error: any) {
-        console.error("GET favourites error:", error);
-        return NextResponse.json({ error: error.message || "Failed to fetch favourites" }, { status: 500 });
+    } catch (err: unknown) {
+        console.error("GET favourites error:", err);
+        const message = err instanceof Error ? err.message : "Failed to fetch favourite";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
@@ -43,9 +44,10 @@ export async function POST(req: NextRequest) {
         );
 
         return NextResponse.json({ success: true });
-    } catch (error: any) {
-        console.error("POST favourites error:", error);
-        return NextResponse.json({ error: error.message || "Failed to save favourite" }, { status: 500 });
+    } catch (err: unknown) {
+        console.error("POST favourites error:", err);
+        const message = err instanceof Error ? err.message : "Failed to save favourite";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
@@ -64,8 +66,9 @@ export async function DELETE(req: NextRequest) {
         );
 
         return NextResponse.json({ success: true });
-    } catch (error: any) {
-        console.error("DELETE favourites error:", error);
-        return NextResponse.json({ error: error.message || "Failed to remove favourite" }, { status: 500 });
+    } catch (err: unknown) {
+        console.error("DELETE favourites error:", err);
+        const message = err instanceof Error ? err.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }

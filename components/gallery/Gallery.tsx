@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { PexelImage } from "@/lib/types";
 import { getCuratedPhotos, searchPhotos } from "@/lib/api/pexels";
 import GalleryImage from "./GalleryImage";
@@ -18,7 +18,7 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
     const [loading, setLoading] = useState(false);
     const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-    const loadMore = async () => {
+    const loadMore = useCallback(async () => {
         if (loading || disableLoadMore) return;
         setLoading(true);
         try {
@@ -28,7 +28,8 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
         } finally {
             setLoading(false);
         }
-    };
+        if (loading || disableLoadMore) return;
+    }, [loading, page, disableLoadMore]);
 
     const handleSearch = async (query: string) => {
         if (disableLoadMore) return;
@@ -47,7 +48,7 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
         observer.observe(sentinelRef.current);
 
         return () => observer.disconnect();
-    }, [sentinelRef.current, loading, disableLoadMore]);
+    }, [loadMore, disableLoadMore]);
 
     return (
         <div className="mb-10">

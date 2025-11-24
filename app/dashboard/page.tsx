@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Container, Gallery } from "@/components";
 import { getFavourites } from "@/lib/api/favourites";
@@ -50,9 +51,11 @@ export default function DashboardPage() {
         <Container>
             <div className="mb-4">
                 {user.picture && (
-                    <img
+                    <Image
                         src={user.picture}
                         alt={user.name || "User profile"}
+                        height={48}
+                        width={48}
                         className="w-24 h-24 rounded-full border border-gray-300 dark:border-gray-700 mb-4"
                     />
                 )}
