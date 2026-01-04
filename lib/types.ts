@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export type PexelImageSrc = {
     original?: string;
     large2x?: string;
@@ -26,4 +28,15 @@ export interface FavouriteDocument {
     _id?: string;            // MongoDB autogenerates this
     auth0Id: string;         // user.sub from Auth0
     images: PexelImage[];        // list of favourite images
+}
+
+export interface ProfileDocument {
+    _id?: ObjectId;          // MongoDB autogenerates this
+    auth0Id: string;         // user.sub from Auth0
+    email: string;           // user's email from Auth0
+    username: string;        // user's username
+    avatarUrl?: string;      // URL to user's avatar image (uses Auth0 picture if available)
+    bio?: string;            // user's bio
+    updatedAt?: Date;
+    createdAt?: Date;
 }
