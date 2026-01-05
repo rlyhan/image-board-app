@@ -37,6 +37,6 @@ export interface ProfileDocument {
     username: string;        // user's username
     avatarUrl?: string;      // URL to user's avatar image (uses Auth0 picture if available)
     bio?: string;            // user's bio
+    createdAt: Date;
     updatedAt?: Date;
-    createdAt?: Date;
 }

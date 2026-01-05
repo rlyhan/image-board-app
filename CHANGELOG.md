@@ -1,3 +1,8 @@
+## [0.9] - 2026-01-05
+### Added
+- Profile create/edit API routes
+- Vitest framework
+
 ## [0.8.6] - 2025-11-24
 ### Fixed
 - CORS for Pexels call
