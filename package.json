@@ -1,15 +1,16 @@
 {
   "name": "image-board-app",
-  "version": "0.8.6",
+  "version": "0.10",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "test": "vitest",
-    "test:unit": "vitest tests/unit",
-    "test:integration": "vitest tests/integration"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.12.0",

@@ -1,3 +1,7 @@
+## [0.10] - 2026-01-06
+### Added
+- CI/CD pipeline
+
 ## [0.9] - 2026-01-05
 ### Added
 - Profile create/edit API routes
