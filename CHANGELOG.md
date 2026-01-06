@@ -1,6 +1,7 @@
 ## [0.10] - 2026-01-06
 ### Added
 - CI/CD pipeline
+- Profile Patch type
 
 ## [0.9] - 2026-01-05
 ### Added

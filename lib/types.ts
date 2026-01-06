@@ -40,3 +40,9 @@ export interface ProfileDocument {
     createdAt: Date;
     updatedAt?: Date;
 }
+
+export type ProfilePatchBody = {
+    username?: string;
+    avatarUrl?: string;
+    bio?: string;
+};

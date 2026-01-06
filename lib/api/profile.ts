@@ -1,5 +1,5 @@
 import type { Collection } from "mongodb";
-import type { ProfileDocument } from "@/lib/types";
+import type { ProfileDocument, ProfilePatchBody } from "@/lib/types";
 
 type SessionUser = {
     sub: string;
@@ -21,7 +21,7 @@ export function makeProfileDefaults(user: SessionUser, now: Date): Omit<ProfileD
     };
 }
 
-export function buildProfilePatchSet(body: any, now: Date) {
+export function buildProfilePatchSet(body: ProfilePatchBody, now: Date) {
     const $set: Record<string, unknown> = { updatedAt: now };
 
     if (typeof body.username === "string") $set.username = body.username;
@@ -51,7 +51,7 @@ export async function getOrCreateProfile(profiles: Collection<ProfileDocument>, 
 export async function updateProfile(
     profiles: Collection<ProfileDocument>,
     user: SessionUser,
-    body: any
+    body: ProfilePatchBody
 ) {
     const now = new Date();
     const $set = buildProfilePatchSet(body, now);
