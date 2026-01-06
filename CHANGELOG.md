@@ -2,6 +2,8 @@
 ### Added
 - CI/CD pipeline
 - Profile Patch type
+### Fixed
+- Eliminate 'any' types
 
 ## [0.9] - 2026-01-05
 ### Added

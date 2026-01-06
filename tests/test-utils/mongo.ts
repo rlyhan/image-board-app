@@ -1,5 +1,5 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { MongoClient, type Db } from "mongodb";
+import { MongoClient } from "mongodb";
 
 export async function setupInMemoryMongo() {
     const mongod = await MongoMemoryServer.create();

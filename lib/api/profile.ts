@@ -1,5 +1,5 @@
 import type { Collection } from "mongodb";
-import type { ProfileDocument, ProfilePatchBody } from "@/lib/types";
+import type { ProfileDocument, ProfilePatchBody, FindOneAndUpdateResult } from "@/lib/types";
 
 type SessionUser = {
     sub: string;
@@ -69,7 +69,8 @@ export async function updateProfile(
         { returnDocument: "after" }
     );
 
-    const updated = (result as any)?.value ?? result;
+    const raw = result as FindOneAndUpdateResult<ProfileDocument>;
+    const updated = raw && "value" in raw ? raw.value : raw;
     if (!updated) {
         return { error: "Failed to update profile", status: 500 as const };
     }

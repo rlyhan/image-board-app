@@ -46,3 +46,8 @@ export type ProfilePatchBody = {
     avatarUrl?: string;
     bio?: string;
 };
+
+export type FindOneAndUpdateResult<T> =
+    | { value: T | null }
+    | T
+    | null;
