@@ -40,3 +40,14 @@ export interface ProfileDocument {
     createdAt: Date;
     updatedAt?: Date;
 }
+
+export type ProfilePatchBody = {
+    username?: string;
+    avatarUrl?: string;
+    bio?: string;
+};
+
+export type FindOneAndUpdateResult<T> =
+    | { value: T | null }
+    | T
+    | null;

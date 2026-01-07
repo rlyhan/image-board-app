@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { auth0 } from "@/lib/auth0";
-import type { ProfileDocument } from "@/lib/types";
+import type { ProfileDocument, ProfilePatchBody } from "@/lib/types";
 import { getOrCreateProfile, updateProfile } from "@/lib/api/profile";
 
 export const runtime = "nodejs";
@@ -33,7 +33,7 @@ export async function PATCH(req: NextRequest) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    let body: any;
+    let body: ProfilePatchBody;
     try {
         body = await req.json();
     } catch {

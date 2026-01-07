@@ -67,10 +67,10 @@ describe("profile mongo integration", async () => {
         expect("data" in result).toBe(true);
         if (!("data" in result)) throw new Error("Expected data result");
 
-        expect(result.data.username).toBe("newname");
-        expect(result.data.bio).toBe("new bio");
-        expect(result.data.createdAt.getTime()).toBe(createdAtBefore.getTime());
-        expect(result.data.updatedAt.getTime()).toBeGreaterThanOrEqual(createdAtBefore.getTime());
+        expect(result?.data?.username).toBe("newname");
+        expect(result?.data?.bio).toBe("new bio");
+        expect(result?.data?.createdAt.getTime()).toBe(createdAtBefore.getTime());
+        expect(result?.data?.updatedAt?.getTime()).toBeGreaterThanOrEqual(createdAtBefore.getTime());
     });
 
     it("updateProfile rejects empty patch", async () => {
