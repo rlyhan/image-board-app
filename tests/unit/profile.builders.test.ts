@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { makeProfileDefaults, buildProfilePatchSet } from "@/lib/api/profile";
+import { makeProfileDefaults, buildProfilePatchSet } from "@/lib/server/profile";
 
 describe("profile builders", () => {
     it("makeProfileDefaults uses fallbacks and sets timestamps", () => {

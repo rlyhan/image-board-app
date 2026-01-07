@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { PexelImage } from "@/lib/types";
-import { getCuratedPhotos, searchPhotos } from "@/lib/api/pexels";
+import { getCuratedPhotos, searchPhotos } from "@/lib/client/pexels";
 import GalleryImage from "./GalleryImage";
 import GallerySearch from "./GallerySearch";
 

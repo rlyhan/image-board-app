@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterAll } from "vitest";
 import type { Collection } from "mongodb";
 import { setupInMemoryMongo } from "../test-utils/mongo";
 import type { ProfileDocument } from "@/lib/types";
-import { ensureProfile, getOrCreateProfile, updateProfile } from "@/lib/api/profile";
+import { ensureProfile, getOrCreateProfile, updateProfile } from "@/lib/server/profile";
 
 let cleanup: () => Promise<void>;
 let profiles: Collection<ProfileDocument>;

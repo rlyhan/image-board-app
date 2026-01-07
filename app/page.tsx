@@ -1,5 +1,5 @@
 import { Container, Gallery } from "@/components";
-import { getCuratedPhotos } from "@/lib/api/pexels";
+import { getCuratedPhotos } from "@/lib/client/pexels";
 
 export const revalidate = 3600; // ISR (revalidate every hour)
 

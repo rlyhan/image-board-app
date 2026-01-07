@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { addToFavourites, removeFromFavourites } from "@/lib/api/favourites";
+import { addToFavourites, removeFromFavourites } from "@/lib/client/favourites";
 import { PexelImage } from "@/lib/types";
 import { Button } from "@/components";
 import { useFavourites } from "@/context/FavouritesContext";

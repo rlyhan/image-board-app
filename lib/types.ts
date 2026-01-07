@@ -41,6 +41,17 @@ export interface ProfileDocument {
     updatedAt?: Date;
 }
 
+export type ProfileDTO = {
+    id: string;
+    auth0Id: string;
+    email: string;
+    username: string;
+    avatarUrl?: string;
+    bio?: string;
+    createdAt: string;
+    updatedAt?: string;
+};
+
 export type ProfilePatchBody = {
     username?: string;
     avatarUrl?: string;

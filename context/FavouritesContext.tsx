@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import { getFavourites } from "@/lib/api/favourites";
+import { getFavourites } from "@/lib/client/favourites";
 import { PexelImage } from "@/lib/types";
 
 type FavouritesContextType = {
