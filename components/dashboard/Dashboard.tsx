@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { Container, Gallery } from "@/components";
-import type { PexelImage, ProfileDTO } from "@/lib/types";
+import type { PexelImage, Profile } from "@/lib/types";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import DashboardHeader from "./DashboardHeader";
 
 type DashboardProps = {
-    initialProfile: ProfileDTO | null;
+    initialProfile: Profile | null;
     initialFavourites: PexelImage[];
 };
 
@@ -16,7 +16,7 @@ export default function Dashboard({
     initialFavourites,
 }: DashboardProps) {
     const { user, isLoading, error } = useUser();
-    const [profile, setProfile] = useState<ProfileDTO | null>(initialProfile);
+    const [profile, setProfile] = useState<Profile | null>(initialProfile);
     const [favourites] = useState<PexelImage[]>(initialFavourites);
 
     if (isLoading) return <Container>Loading...</Container>;
@@ -25,7 +25,7 @@ export default function Dashboard({
 
     return (
         <Container>
-            <DashboardHeader user={user} />
+            <DashboardHeader user={user} profile={profile} />
 
             {favourites.length ? <Gallery initialPhotos={favourites} disableLoadMore /> : null}
         </Container>

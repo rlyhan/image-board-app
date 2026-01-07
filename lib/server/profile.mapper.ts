@@ -1,7 +1,7 @@
 import type { ProfileDocument } from "@/lib/types";
-import type { ProfileDTO } from "@/lib/types";
+import type { Profile } from "@/lib/types";
 
-export function profileToDTO(doc: ProfileDocument): ProfileDTO {
+export function profileToDTO(doc: ProfileDocument): Profile {
     return {
         id: doc._id!.toString(),
         auth0Id: doc.auth0Id,

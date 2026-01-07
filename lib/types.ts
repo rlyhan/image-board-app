@@ -41,7 +41,7 @@ export interface ProfileDocument {
     updatedAt?: Date;
 }
 
-export type ProfileDTO = {
+export type Profile = {
     id: string;
     auth0Id: string;
     email: string;
