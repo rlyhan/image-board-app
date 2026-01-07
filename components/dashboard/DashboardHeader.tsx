@@ -1,15 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { User } from "@auth0/nextjs-auth0/types";
 import type { Profile } from "@/lib/types";
+import DashboardProfileForm from "./DashboardProfileForm";
 
 type DashboardHeaderProps = {
     user: User;
     profile: Profile | null;
+    onProfileUpdated: (profile: Profile) => void;
 };
 
-function DashboardHeader({ user, profile }: DashboardHeaderProps) {
+function DashboardHeader({ user, profile, onProfileUpdated }: DashboardHeaderProps) {
+    const [isEditing, setIsEditing] = useState(false);
+
     const displayName = profile?.username?.trim() || user.name || "User";
     const displayPicture = profile?.avatarUrl?.trim() || user.picture || null;
     const bio = profile?.bio?.trim() || null;
@@ -25,9 +30,34 @@ function DashboardHeader({ user, profile }: DashboardHeaderProps) {
                     className="w-24 h-24 rounded-full border border-gray-300 dark:border-gray-700 mb-4"
                 />
             )}
+
             <h2 className="text-2xl font-semibold mb-1">{displayName}</h2>
-            <p className="text-gray-600 dark:text-gray-300">{user.email}</p>
-            {bio && <p className="mt-2 text-gray-700 dark:text-gray-400">{bio}</p>}
+
+            <div className="flex justify-between gap-4">
+                {bio && <p className="mt-2 text-gray-700 dark:text-gray-400">{bio}</p>}
+
+                <button
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition cursor-pointer"
+                    aria-label="Edit profile"
+                    onClick={() => setIsEditing(true)}
+                >
+                    Edit Profile
+                </button>
+            </div>
+
+            <DashboardProfileForm
+                open={isEditing}
+                initial={{
+                    username: profile?.username ?? "",
+                    avatarUrl: profile?.avatarUrl ?? user.picture ?? "",
+                    bio: profile?.bio ?? "",
+                }}
+                onClose={() => setIsEditing(false)}
+                onSaved={(updated) => {
+                    onProfileUpdated(updated);
+                    setIsEditing(false);
+                }}
+            />
         </div>
     );
 }

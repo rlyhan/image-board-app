@@ -9,7 +9,7 @@ export function profileToDTO(doc: ProfileDocument): Profile {
         username: doc.username,
         avatarUrl: doc.avatarUrl,
         bio: doc.bio,
-        createdAt: doc.createdAt.toISOString(),
-        updatedAt: doc.updatedAt?.toISOString(),
+        createdAt: doc.createdAt.toString(),
+        updatedAt: doc.updatedAt?.toString(),
     };
 }

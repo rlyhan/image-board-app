@@ -25,7 +25,7 @@ export default function Dashboard({
 
     return (
         <Container>
-            <DashboardHeader user={user} profile={profile} />
+            <DashboardHeader user={user} profile={profile} onProfileUpdated={(p) => setProfile(p)} />
 
             {favourites.length ? <Gallery initialPhotos={favourites} disableLoadMore /> : null}
         </Container>
