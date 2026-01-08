@@ -1,15 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
 import { auth0 } from "@/lib/auth0";
-import type { ProfileDocument, ProfilePatchBody } from "@/lib/types";
-import { getOrCreateProfile, updateProfile } from "@/lib/api/profile";
+import type { ProfilePatchBody } from "@/lib/types";
+import { getOrCreateProfile, updateProfile } from "@/lib/server/profile";
+import { getProfilesCollection } from "@/lib/server/db";
 
 export const runtime = "nodejs";
-
-async function getProfilesCollection() {
-    const client = await clientPromise;
-    return client.db("imageboard").collection<ProfileDocument>("profiles");
-}
 
 export async function GET(req: NextRequest) {
     const session = await auth0.getSession(req);

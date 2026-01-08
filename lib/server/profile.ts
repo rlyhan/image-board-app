@@ -1,3 +1,5 @@
+import "server-only";
+
 import type { Collection } from "mongodb";
 import type { ProfileDocument, ProfilePatchBody, FindOneAndUpdateResult } from "@/lib/types";
 

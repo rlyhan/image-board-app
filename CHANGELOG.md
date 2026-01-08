@@ -1,3 +1,11 @@
+## [1.0.0] - 2026-01-07
+### Added
+- Profile info update form
+- Modal component
+### Changed
+- Client/server architecture in lib
+- Separate MongoDB collections from server logic
+
 ## [0.10] - 2026-01-06
 ### Added
 - CI/CD pipeline

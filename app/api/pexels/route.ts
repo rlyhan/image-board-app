@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchPhotos, searchPhotos } from "@/lib/pexels";
+import { fetchPhotos, fetchPhotosWithQuery } from "@/lib/server/pexels";
 
 export async function GET(req: NextRequest) {
     const page = Number(req.nextUrl.searchParams.get("page") || 1);
@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     let photos;
     try {
         photos = query
-            ? await searchPhotos(query, per_page)
+            ? await fetchPhotosWithQuery(query, per_page)
             : await fetchPhotos(page, per_page);
     } catch (err: unknown) {
         const message = err instanceof Error ? err.message : "Unknown error";
