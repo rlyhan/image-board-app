@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth0 } from "@/lib/auth0";
 import type { ProfilePatchBody } from "@/lib/types";
 import { getOrCreateProfile, updateProfile } from "@/lib/server/profile";
-import { getProfilesCollection } from "@/lib/server/profile";
+import { getProfilesCollection } from "@/lib/server/db";
 
 export const runtime = "nodejs";
 

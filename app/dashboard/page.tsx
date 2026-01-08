@@ -1,6 +1,7 @@
 import { Dashboard } from "@/components";
 import { auth0 } from "@/lib/auth0";
-import { getOrCreateProfile, getProfilesCollection } from "@/lib/server/profile";
+import { getProfilesCollection, getFavouritesCollection } from "@/lib/server/db";
+import { getOrCreateProfile } from "@/lib/server/profile";
 import { profileToDTO } from "@/lib/server/profile.mapper";
 import { getFavourites } from "@/lib/server/favourites";
 
@@ -12,7 +13,8 @@ export default async function DashboardPage() {
     const profileDoc = await getOrCreateProfile(profiles, session.user);
     const profile = profileDoc ? profileToDTO(profileDoc) : null;
 
-    const favourites = await getFavourites(session.user.sub);
+    const allFavourites = await getFavouritesCollection();
+    const favourites = await getFavourites(allFavourites, session.user.sub);
 
     return (
         <Dashboard

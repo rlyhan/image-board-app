@@ -1,7 +1,6 @@
 import "server-only";
 
 import type { Collection } from "mongodb";
-import clientPromise from "@/lib/mongodb";
 import type { ProfileDocument, ProfilePatchBody, FindOneAndUpdateResult } from "@/lib/types";
 
 type SessionUser = {
@@ -11,11 +10,6 @@ type SessionUser = {
     name?: string;
     picture?: string;
 };
-
-export async function getProfilesCollection() {
-    const client = await clientPromise;
-    return client.db("imageboard").collection<ProfileDocument>("profiles");
-}
 
 export function makeProfileDefaults(user: SessionUser, now: Date): Omit<ProfileDocument, "_id"> {
     return {
