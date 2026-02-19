@@ -67,3 +67,13 @@ export type FindOneAndUpdateResult<T> =
     | { value: T | null }
     | T
     | null;
+
+export type CheckoutFormData = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    postcode: string;
+};

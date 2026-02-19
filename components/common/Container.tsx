@@ -3,16 +3,16 @@ import cn from "classnames";
 
 type ContainerProps = {
     children: ReactNode;
-    containerSize?: "medium" | "large";
+    containerSize?: "lg" | "xl";
     additionalClasses?: string;
 };
 
 const containerWidths = {
-    "medium": "max-w-[1000px]",
-    "large": "max-w-[1500px]"
+    "lg": "max-w-lg",
+    "xl": "max-w-[1500px]"
 }
 
-export default function Container({ children, containerSize = "large", additionalClasses }: ContainerProps) {
+export default function Container({ children, containerSize = "xl", additionalClasses }: ContainerProps) {
     return (
         <div
             className={cn("mx-auto px-8", containerWidths[containerSize], additionalClasses)}
