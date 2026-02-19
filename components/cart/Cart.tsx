@@ -1,7 +1,8 @@
 
-import { CartItem } from "@/lib/types"
+import { CartItem, PexelImage } from "@/lib/types"
 import Image from "next/image"
 import { Button } from "../common"
+import { ITEM_PRICE } from "@/lib/config"
 
 type CartProps = {
     cartItems: CartItem[];
@@ -9,31 +10,31 @@ type CartProps = {
     onClickRemove: (imageId: number) => void;
 }
 
-export default function Cart({ cartItems, onClickUpdateQuantity, onClickRemove }: CartProps) {
+export default function Cart({ cartItems, onClickUpdateQuantity }: CartProps) {
+    const getProductDescription = (image: PexelImage) => `${image.alt ?? "Photograph"} by ${image.photographer}`
+
     return (
-        <table className="text-left border-separate border-spacing-2">
+        <table className="text-left border-separate border-spacing-6 bg-neutral-100 rounded-md">
             <caption className="sr-only">Shopping Cart</caption>
             <thead>
                 <tr>
-                    <th>Image</th>
-                    <th>Item</th>
+                    <th>Product</th>
                     <th>Price</th>
                     <th>Quantity</th>
                 </tr>
             </thead>
             <tbody>
-                {cartItems.map((cartItem, index) =>
+                {cartItems.map((cartItem) =>
                     <tr key={`cart-item-${cartItem.image.id}`}>
-                        <td>
-                            <div className="max-h-[200px] overflow-hidden">
-                                <Image src={cartItem.image.src?.portrait || cartItem.image.src?.small || ""} alt={cartItem.image.alt ?? ""} width={200} height={150} />
+                        <td className="w-full">
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <div className="max-h-[200px] overflow-hidden">
+                                    <Image src={cartItem.image.src?.portrait || cartItem.image.src?.small || ""} alt={cartItem.image.alt ?? ""} width={200} height={150} />
+                                </div>
+                                <h3 className="text-sm max-w-[300px] mr-auto">{getProductDescription(cartItem.image)}</h3>
                             </div>
                         </td>
-                        <td>
-                            <h3>{cartItem.image.alt ?? `Cart Item ${index + 1}`}</h3>
-                            <h4>By {cartItem.image.photographer}</h4>
-                        </td>
-                        <td>£10.00</td>
+                        <td>{`£${ITEM_PRICE}.00`}</td>
                         <td>
                             <div className="flex items-center gap-2">
                                 <Button

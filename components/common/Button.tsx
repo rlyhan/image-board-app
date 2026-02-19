@@ -20,7 +20,7 @@ const variants = {
         p-2 bg-white rounded-full shadow-lg hover:bg-gray-100
     `,
     quantity: `
-        w-7 h-7 flex justify-center items-center
+        w-7 h-7 flex justify-center items-center hover:bg-neutral-600 hover:text-white
     `
 };
 
