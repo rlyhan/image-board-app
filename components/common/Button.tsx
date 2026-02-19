@@ -27,9 +27,7 @@ const variants = {
 const themes = {
     default: `
         text-gray-800 hover:text-gray-900 
-        dark:text-white dark:hover:text-gray-100
-        border-gray-400 dark:border-gray-600
-        hover:border-gray-500 dark:hover:border-gray-300
+        border-gray-400 hover:border-gray-500 
     `,
     light: `
         text-gray-800 hover:text-gray-900
@@ -45,15 +43,11 @@ const themes = {
         text-white
         bg-green-600 hover:bg-green-700
         border-green-700 hover:border-green-800
-        dark:bg-green-500 dark:hover:bg-green-600
-        dark:border-green-600 dark:hover:border-green-700
     `,
     red: `
         text-white
         bg-red-600 hover:bg-red-700
         border-red-700 hover:border-red-800
-        dark:bg-red-500 dark:hover:bg-red-600
-        dark:border-red-600 dark:hover:border-red-700
     `,
 };
 

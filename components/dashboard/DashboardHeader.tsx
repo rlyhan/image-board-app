@@ -27,14 +27,14 @@ function DashboardHeader({ user, profile, onProfileUpdated }: DashboardHeaderPro
                     alt={displayName}
                     height={48}
                     width={48}
-                    className="w-24 h-24 rounded-full border border-gray-300 dark:border-gray-700 mb-4"
+                    className="w-24 h-24 rounded-full border border-gray-300 mb-4"
                 />
             )}
 
             <h2 className="text-2xl font-semibold mb-1">{displayName}</h2>
 
             <div className="flex justify-between gap-4">
-                {bio && <p className="mt-2 text-gray-700 dark:text-gray-400">{bio}</p>}
+                {bio && <p className="mt-2 text-gray-700">{bio}</p>}
 
                 <button
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition cursor-pointer"
