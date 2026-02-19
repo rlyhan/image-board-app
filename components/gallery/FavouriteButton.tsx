@@ -51,7 +51,7 @@ export default function FavouriteButton({ image }: FavouriteButtonProps) {
             onClick={toggleFavourite}
             label={loading ? "Updating..." : buttonLabel}
             disabled={loading}
-            variant={currentlyFavourite ? "red" : "green"}
+            theme={currentlyFavourite ? "red" : "green"}
         />
     );
 }

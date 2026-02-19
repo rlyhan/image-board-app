@@ -1,3 +1,7 @@
+## [1.1.0] - 2026-02-19
+### Added
+- Add to cart functionality
+
 ## [1.0.0] - 2026-01-07
 ### Added
 - Profile info update form

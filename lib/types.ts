@@ -24,6 +24,11 @@ export type PexelImage = {
     avg_color?: string;
 };
 
+export type CartItem = {
+    image: PexelImage;
+    quantity: number;
+};
+
 export interface FavouriteDocument {
     _id?: string;            // MongoDB autogenerates this
     auth0Id: string;         // user.sub from Auth0

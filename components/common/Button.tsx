@@ -1,15 +1,28 @@
+import { ReactNode } from "react";
 import cn from "classnames";
 
 type ButtonProps = {
     onClick: React.MouseEventHandler<HTMLButtonElement>;
-    label: string;
+    label: string | ReactNode;
+    name?: string;
     additionalClasses?: string;
-    variant?: "default" | "light" | "dark" | "green" | "red";
+    variant?: "base" | "round" | "quantity";
+    theme?: "default" | "light" | "dark" | "green" | "red";
 } & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick">;
 
-const base = `
-    font-semibold py-2 px-4 rounded shadow transition-colors border cursor-pointer
-`;
+const defaultClasses = "font-semibold transition-colors border cursor-pointer"
+
+const variants = {
+    base: `
+        py-2 px-4 rounded shadow"
+    `,
+    round: `
+        p-2 bg-white rounded-full shadow-lg hover:bg-gray-100
+    `,
+    quantity: `
+        w-7 h-7 flex justify-center items-center
+    `
+};
 
 const themes = {
     default: `
@@ -47,15 +60,19 @@ const themes = {
 export default function Button({
     onClick,
     label,
+    name,
     additionalClasses,
-    variant = "default"
+    variant = "base",
+    theme = "default",
 }: ButtonProps) {
     return (
         <button
             onClick={onClick}
+            name={name}
             className={cn(
-                base,
-                themes[variant],
+                defaultClasses,
+                variants[variant],
+                themes[theme],
                 additionalClasses
             )}
         >
