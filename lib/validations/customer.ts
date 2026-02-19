@@ -1,6 +1,6 @@
 import { CheckoutFormData } from "@/lib/types"
 
-export type CheckoutFormErrors = Partial<Record<keyof CheckoutFormData, string>>;
+export type CheckoutFormErrors = Partial<Record<string, string>>;
 
 export default function validate(data: CheckoutFormData): CheckoutFormErrors {
     const errors: CheckoutFormErrors = {};

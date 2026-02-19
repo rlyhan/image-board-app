@@ -1,3 +1,7 @@
+## [1.3.0] - 2026-02-19
+### Added
+- Checkout payment page
+
 ## [1.2.0] - 2026-02-19
 ### Added
 - Checkout customer page

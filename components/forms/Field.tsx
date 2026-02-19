@@ -1,17 +1,17 @@
-import { CheckoutFormData } from "@/lib/types"
-
 type FieldProps = {
-    id: keyof CheckoutFormData;
+    id: string;
     label: string;
     value: string;
     error?: string;
-    onChange: (id: keyof CheckoutFormData, value: string) => void;
+    onChange: (id: string, value: string) => void;
     type?: string;
+    inputMode?: React.InputHTMLAttributes<HTMLInputElement>['inputMode'];
     placeholder?: string;
     required?: boolean;
+    maxLength?: number;
 };
 
-export default function Field({ id, label, value, error, onChange, type = 'text', placeholder, required }: FieldProps) {
+export default function Field({ id, label, value, error, onChange, type = 'text', placeholder, maxLength, required }: FieldProps) {
     return (
         <div className="flex flex-col gap-1">
             <label htmlFor={id} className="text-sm font-medium text-gray-700">
@@ -22,6 +22,7 @@ export default function Field({ id, label, value, error, onChange, type = 'text'
                 type={type}
                 value={value}
                 placeholder={placeholder}
+                maxLength={maxLength}
                 onChange={(e) => onChange(id, e.target.value)}
                 className={`border rounded-md px-3 py-2 text-sm outline-none transition-colors
                     focus:ring-2 focus:ring-black focus:border-black

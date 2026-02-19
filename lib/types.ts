@@ -77,3 +77,10 @@ export type CheckoutFormData = {
     city: string;
     postcode: string;
 };
+
+export type PaymentFormData = {
+    cardholderName: string;
+    cardNumber: string;
+    expiryDate: string;
+    securityCode: string;
+};

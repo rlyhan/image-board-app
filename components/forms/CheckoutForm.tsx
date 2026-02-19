@@ -20,7 +20,7 @@ export default function CheckoutForm() {
     const [errors, setErrors] = useState<CheckoutFormErrors>({});
     const [submitted, setSubmitted] = useState(false);
 
-    const handleChange = (id: keyof CheckoutFormData, value: string) => {
+    const handleChange = (id: string, value: string) => {
         setFormData((prev) => ({ ...prev, [id]: value }));
         // Clear error on change
         if (errors[id]) setErrors((prev) => ({ ...prev, [id]: undefined }));
@@ -40,12 +40,13 @@ export default function CheckoutForm() {
     };
 
     if (submitted) {
-        return (
-            <div className="text-center py-12">
-                <p className="text-2xl font-semibold">Order placed!</p>
-                <p className="text-gray-500 mt-2">Thanks {formData.firstName}, we'll send a confirmation to {formData.email}.</p>
-            </div>
-        );
+
+        // return (
+        //     <div className="text-center py-12">
+        //         <p className="text-2xl font-semibold">Order placed!</p>
+        //         <p className="text-gray-500 mt-2">Thanks {formData.firstName}, we'll send a confirmation to {formData.email}.</p>
+        //     </div>
+        // );
     }
 
     return (
