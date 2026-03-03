@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react';
 import { CheckoutFormData } from "@/lib/types"
 import validate, { CheckoutFormErrors } from "@/lib/validations/customer"
 import Field from './Field';
+import { useOrder } from '@/context/OrderContext';
 
 const INITIAL_FORM_STATE: CheckoutFormData = {
     firstName: '',
@@ -15,7 +16,12 @@ const INITIAL_FORM_STATE: CheckoutFormData = {
     postcode: '',
 };
 
-export default function CheckoutForm() {
+type CheckoutFormProps = {
+    onSuccess: () => void;
+}
+
+export default function CheckoutForm({ onSuccess }: CheckoutFormProps) {
+    const { updateCustomerDetails } = useOrder();
     const [formData, setFormData] = useState<CheckoutFormData>(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState<CheckoutFormErrors>({});
     const [submitted, setSubmitted] = useState(false);
@@ -35,12 +41,12 @@ export default function CheckoutForm() {
             return;
         }
 
-        // TODO: hook up to payment/order API
+        updateCustomerDetails(formData)
         setSubmitted(true);
     };
 
     if (submitted) {
-
+        onSuccess();
         // return (
         //     <div className="text-center py-12">
         //         <p className="text-2xl font-semibold">Order placed!</p>

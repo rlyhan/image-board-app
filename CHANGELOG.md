@@ -1,3 +1,8 @@
+## [1.4.0] - 2026-03-03
+### Added
+- Checkout payment/order flow
+- Order success page
+
 ## [1.3.0] - 2026-02-19
 ### Added
 - Checkout payment page

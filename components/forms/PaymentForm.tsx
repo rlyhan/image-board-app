@@ -5,6 +5,8 @@ import { PaymentFormData } from '@/lib/types';
 import { formatCardNumber, formatExpiryDate } from '@/lib/helpers/payment';
 import validate, { PaymentFormErrors } from '@/lib/validations/payment';
 import Field from './Field';
+import { useOrder } from '@/context/OrderContext';
+import { useCart } from '@/context/CartContext';
 
 const INITIAL_FORM_STATE: PaymentFormData = {
     cardholderName: '',
@@ -14,10 +16,12 @@ const INITIAL_FORM_STATE: PaymentFormData = {
 };
 
 type PaymentFormProps = {
-    onSuccess: () => void;
+    onSuccess: (orderId: string) => void;
 };
 
 export default function PaymentForm({ onSuccess }: PaymentFormProps) {
+    const { cartItems, clearCart } = useCart();
+    const { orderState, setSuccess } = useOrder();
     const [formData, setFormData] = useState<PaymentFormData>(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState<PaymentFormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,24 +50,31 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch('/api/payment', {
+            const response = await fetch('/api/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    cardholderName: formData.cardholderName,
-                    cardNumber: formData.cardNumber.replace(/\s/g, ''),
-                    expiryDate: formData.expiryDate,
-                    securityCode: formData.securityCode,
+                    customerDetails: orderState.customerDetails,
+                    paymentDetails: {
+                        cardholderName: formData.cardholderName,
+                        cardNumber: formData.cardNumber.replace(/\s/g, ''),
+                        expiryDate: formData.expiryDate,
+                        securityCode: formData.securityCode,
+                    },
+                    cartItems: cartItems
                 }),
             });
 
+            const data = await response.json();
+
             if (!response.ok) {
-                const data = await response.json();
                 setServerError(data.message || 'Payment failed. Please try again.');
                 return;
             }
 
-            onSuccess();
+            setSuccess();
+            clearCart();
+            onSuccess(data.orderId);
         } catch {
             setServerError('Something went wrong. Please try again.');
         } finally {

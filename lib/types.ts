@@ -46,6 +46,14 @@ export interface ProfileDocument {
     updatedAt?: Date;
 }
 
+export interface OrderDocument {
+    _id?: ObjectId;                 // MongoDB autogenerates this
+    customerDetails: CheckoutFormData;
+    cartItems: CartItem[];
+    createdAt: Date;
+    updatedAt?: Date;
+}
+
 export type Profile = {
     id: string;
     auth0Id: string;
