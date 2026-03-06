@@ -66,12 +66,12 @@ export default function DashboardProfileForm({
 
     return (
         <Modal open={open} onClose={onClose} title="Edit profile">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
+            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                 <h3 className="text-lg font-semibold">Edit profile</h3>
                 <button
                     type="button"
                     onClick={onClose}
-                    className="px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="px-2 py-1 rounded hover:bg-gray-100"
                     aria-label="Close"
                     disabled={saving}
                 >
@@ -91,7 +91,7 @@ export default function DashboardProfileForm({
                     <input
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        className="w-full rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 px-3 py-2 text-sm"
+                        className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm"
                         placeholder="Your display name"
                         maxLength={40}
                         disabled={saving}
@@ -104,7 +104,7 @@ export default function DashboardProfileForm({
                     <input
                         value={avatarUrl}
                         onChange={(e) => setAvatarUrl(e.target.value)}
-                        className="w-full rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 px-3 py-2 text-sm"
+                        className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm"
                         placeholder="https://..."
                         disabled={saving}
                     />
@@ -118,7 +118,7 @@ export default function DashboardProfileForm({
                     <textarea
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
-                        className="w-full rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 px-3 py-2 text-sm"
+                        className="w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm"
                         placeholder="A short bio..."
                         rows={3}
                         maxLength={160}
@@ -131,7 +131,7 @@ export default function DashboardProfileForm({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-4 py-2 rounded border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+                        className="px-4 py-2 rounded border border-gray-300"
                         disabled={saving}
                     >
                         Cancel

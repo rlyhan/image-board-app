@@ -1,3 +1,20 @@
+## [1.4.0] - 2026-03-03
+### Added
+- Checkout payment/order flow
+- Order success page
+
+## [1.3.0] - 2026-02-19
+### Added
+- Checkout payment page
+
+## [1.2.0] - 2026-02-19
+### Added
+- Checkout customer page
+
+## [1.1.0] - 2026-02-19
+### Added
+- Add to cart functionality
+
 ## [1.0.0] - 2026-01-07
 ### Added
 - Profile info update form

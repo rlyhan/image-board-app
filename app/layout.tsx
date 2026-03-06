@@ -4,6 +4,7 @@ import { auth0 } from "@/lib/auth0";
 import "./globals.css";
 import { MainNav } from "@/components";
 import { FavouritesProvider } from "@/context/FavouritesContext";
+import { CartProvider } from "@/context/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,10 +33,12 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <MainNav isAuthenticated={!!user} />
-        <FavouritesProvider>
-          {children}
-        </FavouritesProvider>
+        <CartProvider>
+          <MainNav isAuthenticated={!!user} />
+          <FavouritesProvider>
+            {children}
+          </FavouritesProvider>
+        </CartProvider>
       </body>
     </html>
   );

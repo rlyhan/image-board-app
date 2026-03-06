@@ -24,6 +24,11 @@ export type PexelImage = {
     avg_color?: string;
 };
 
+export type CartItem = {
+    image: PexelImage;
+    quantity: number;
+};
+
 export interface FavouriteDocument {
     _id?: string;            // MongoDB autogenerates this
     auth0Id: string;         // user.sub from Auth0
@@ -37,6 +42,14 @@ export interface ProfileDocument {
     username: string;        // user's username
     avatarUrl?: string;      // URL to user's avatar image (uses Auth0 picture if available)
     bio?: string;            // user's bio
+    createdAt: Date;
+    updatedAt?: Date;
+}
+
+export interface OrderDocument {
+    _id?: ObjectId;                 // MongoDB autogenerates this
+    customerDetails: CheckoutFormData;
+    cartItems: CartItem[];
     createdAt: Date;
     updatedAt?: Date;
 }
@@ -62,3 +75,20 @@ export type FindOneAndUpdateResult<T> =
     | { value: T | null }
     | T
     | null;
+
+export type CheckoutFormData = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    postcode: string;
+};
+
+export type PaymentFormData = {
+    cardholderName: string;
+    cardNumber: string;
+    expiryDate: string;
+    securityCode: string;
+};

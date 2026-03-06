@@ -32,7 +32,7 @@ function Modal({ open, onClose, children, title }: ModalProps) {
                 onClick={onClose}
             />
 
-            <div className="relative w-full max-w-lg rounded-lg bg-white dark:bg-gray-900 shadow-lg border border-gray-200 dark:border-gray-800">
+            <div className="relative w-full max-w-lg rounded-lg bg-white shadow-lg border border-gray-200">
                 {children}
             </div>
         </div>

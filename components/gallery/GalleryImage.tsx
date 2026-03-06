@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { PexelImage } from "@/lib/types";
 import FavouriteButton from "./FavouriteButton";
+import AddCartButton from "../cart/AddCartButton";
 
 type GalleryImageProps = {
     photo: PexelImage;
@@ -14,7 +15,8 @@ export default function GalleryImage({ photo }: GalleryImageProps) {
             className="overflow-hidden rounded-lg relative group"
             style={{ gridRowEnd: `span ${rowSpan}` }}
         >
-            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+            <div className="flex items-center gap-2 absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                <AddCartButton image={photo} />
                 <FavouriteButton image={photo} />
             </div>
             <Image
