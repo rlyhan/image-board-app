@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CheckoutFormData, PaymentFormData, CartItem, OrderDocument } from "@/lib/types";
 import clientPromise from "@/lib/mongodb";
+import { validatePayment, generatePaymentToken } from "@/lib/payment";
 
 export const runtime = "nodejs";
 
@@ -21,17 +22,23 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Missing customer or payment details" }, { status: 400 });
         }
 
+        const paymentError = validatePayment(paymentDetails);
+        if (paymentError) {
+            return NextResponse.json({ error: paymentError }, { status: 400 });
+        }
+        const paymentToken = generatePaymentToken();
+
         const orders = await getOrdersCollection();
         const result = await orders.insertOne({
             customerDetails,
             cartItems,
+            paymentToken,
             createdAt: new Date(),
         });
 
         return NextResponse.json({ success: true, orderId: result.insertedId.toString() });
     } catch (err: unknown) {
         console.error("POST orders error:", err);
-        const message = err instanceof Error ? err.message : "Failed to save order";
-        return NextResponse.json({ error: message }, { status: 500 });
+        return NextResponse.json({ error: "Failed to save order" }, { status: 500 });
     }
 }

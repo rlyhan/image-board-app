@@ -1,3 +1,9 @@
+## [1.5.0] - 2026-03-03
+### Added
+- Payment route call before order route call
+### Fixed
+- Redirection if customer details missing during payment stage
+
 ## [1.4.0] - 2026-03-03
 ### Added
 - Checkout payment/order flow

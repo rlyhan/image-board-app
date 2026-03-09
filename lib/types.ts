@@ -50,6 +50,7 @@ export interface OrderDocument {
     _id?: ObjectId;                 // MongoDB autogenerates this
     customerDetails: CheckoutFormData;
     cartItems: CartItem[];
+    paymentToken: string;           // token returned from /api/payment
     createdAt: Date;
     updatedAt?: Date;
 }
