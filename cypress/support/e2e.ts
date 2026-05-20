@@ -1,1 +1,9 @@
-// Cypress support file - runs before every e2e test file
+import './commands';
+
+declare global {
+    namespace Cypress {
+        interface Chainable {
+            loginAsTestUser(): Chainable<void>;
+        }
+    }
+}

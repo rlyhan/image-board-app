@@ -93,12 +93,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         dispatch({ type: 'HYDRATE_CART', payload: parsed });
     }, []);
 
-    // Save to localStorage whenever cart changes
+    // Skip until hydrated, otherwise the first commit overwrites localStorage
+    // with the empty initial state before HYDRATE_CART has been applied.
     useEffect(() => {
-        if (cartItems.length > 0 || localStorage.getItem(CART_STORAGE_KEY)) {
-            localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
-        }
-    }, [cartItems]);
+        if (!isHydrated) return;
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+    }, [cartItems, isHydrated]);
 
     const addToCart = (image: PexelImage) => {
         dispatch({ type: 'ADD_TO_CART', payload: image });

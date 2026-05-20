@@ -10,11 +10,11 @@ type MainNavProps = {
 }
 
 export default function MainNav({ isAuthenticated = false }: MainNavProps) {
-    const { getCartTotal } = useCart();
+    const { getCartTotal, isHydrated } = useCart();
     const cartTotal = getCartTotal()
 
     return (
-        <header>
+        <header data-cart-hydrated={isHydrated ? "true" : "false"}>
             <nav className="max-w-[1500px] mx-auto p-8 flex justify-between">
                 <Link href="/" className="text-2xl block self-center">Image Board App</Link>
                 <ul className="flex gap-6 items-center">

@@ -2,7 +2,12 @@ describe('Checkout Journey', () => {
     const TEST_ORDER_ID = '507f1f77bcf86cd799439011';
 
     beforeEach(() => {
-        // Stub the order API to avoid real DB writes and have a predictable order ID
+        cy.loginAsTestUser();
+
+        // Block client-side load-more so the intersection observer can't pull
+        // real Pexels photos in mid-test. Initial gallery is still SSR'd from real Pexels.
+        cy.intercept('GET', '/api/pexels*', { statusCode: 200, body: { photos: [] } });
+
         cy.intercept('POST', '/api/order', {
             statusCode: 200,
             body: { success: true, orderId: TEST_ORDER_ID },
@@ -10,20 +15,23 @@ describe('Checkout Journey', () => {
     });
 
     it('completes the full checkout flow from gallery to success page', () => {
-        // 1. Visit homepage and add the first image to cart
         cy.visit('/');
-        // The add-to-cart button is hidden until hover; force: true bypasses visibility
-        cy.get('.group').first().find('button').first().click({ force: true });
+        // Wait for CartProvider's hydration effect; implies React has hydrated
+        // and the add-to-cart handler is attached. Long timeout for cold-compile dev.
+        cy.get('header[data-cart-hydrated="true"]', { timeout: 30000 }).should('exist');
 
-        // 2. Click the nav cart icon to go to /cart
+        // force: true bypasses opacity-0 — the button is only visible on parent
+        // :hover, which Cypress can't trigger reliably via synthetic events.
+        cy.get('.group').first().find('button').first().click({ force: true });
+        // Surface a lost click here rather than failing three steps later in /cart.
+        cy.get('header').contains('1').should('be.visible');
+
         cy.get('a[href="/cart"]').click();
         cy.url().should('include', '/cart');
 
-        // 3. Click 'Checkout' to go to /checkout
         cy.contains('a', 'Checkout').click();
         cy.url().should('include', '/checkout');
 
-        // 4. Fill in the customer details form
         cy.get('#firstName').type('Jane');
         cy.get('#lastName').type('Smith');
         cy.get('#email').type('jane@example.com');
@@ -33,14 +41,13 @@ describe('Checkout Journey', () => {
         cy.contains('button', 'Continue to payment').click();
         cy.url().should('include', '/checkout/payment');
 
-        // 5. Fill in the payment form
+        // Card number and expiry auto-format client-side (spaces / MM/YY slash).
         cy.get('#cardholderName').type('Jane Smith');
         cy.get('#cardNumber').type('4242424242424242');
         cy.get('#expiryDate').type('1228');
         cy.get('#securityCode').type('123');
         cy.contains('button', 'Pay Now').click();
 
-        // 6. Assert redirect to success page and order ID is visible
         cy.wait('@createOrder');
         cy.url().should('include', '/checkout/success');
         cy.contains(TEST_ORDER_ID).should('be.visible');
