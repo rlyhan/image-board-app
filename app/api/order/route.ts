@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CheckoutFormData, CartItem, OrderDocument } from "@/lib/types";
+import { OrderDocument } from "@/lib/types";
+import { OrderRequestSchema } from "@/lib/schemas";
 import clientPromise from "@/lib/mongodb";
 import { auth0 } from "@/lib/auth0";
+import { ITEM_PRICE } from "@/lib/config";
 
 export const runtime = "nodejs";
 
@@ -18,26 +20,24 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const { customerDetails, paymentToken, cartItems }: {
-            customerDetails: CheckoutFormData;
-            paymentToken: string;
-            cartItems: CartItem[];
-        } = await req.json();
+        const body = await req.json();
+        const parsed = OrderRequestSchema.safeParse(body);
+        if (!parsed.success) {
+            return NextResponse.json(
+                { error: "Invalid request", details: parsed.error.issues },
+                { status: 400 }
+            );
+        }
 
-        if (!cartItems || cartItems.length === 0) {
-            return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
-        }
-        if (!customerDetails) {
-            return NextResponse.json({ error: "Missing customer details" }, { status: 400 });
-        }
-        if (!paymentToken || typeof paymentToken !== "string") {
-            return NextResponse.json({ error: "Missing payment token" }, { status: 400 });
-        }
+        const { customerDetails, paymentToken, cartItems } = parsed.data;
+
+        // Server-authoritative total — client-supplied prices are never trusted.
+        const orderTotal = cartItems.reduce((sum, item) => sum + ITEM_PRICE * item.quantity, 0);
 
         // PRODUCTION: verify the payment with your gateway here, before writing to the DB.
         // With Stripe this would be:
         //   const intent = await stripe.paymentIntents.retrieve(paymentToken);
-        //   if (intent.status !== "succeeded") return 402;
+        //   if (intent.status !== "succeeded" || intent.amount !== orderTotal * 100) return 402;
         // The client sends the PaymentIntent ID (from stripe.confirmPayment) instead of a
         // self-generated token, so the server can independently confirm Stripe processed the charge.
 
@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
             customerDetails,
             cartItems,
             paymentToken,
+            orderTotal,
             createdAt: new Date(),
         });
 

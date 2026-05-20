@@ -1,4 +1,6 @@
 import { ObjectId } from "mongodb";
+import { z } from "zod";
+import { CartItemSchema, CheckoutFormDataSchema } from "@/lib/schemas";
 
 export type PexelImageSrc = {
     original?: string;
@@ -24,10 +26,8 @@ export type PexelImage = {
     avg_color?: string;
 };
 
-export type CartItem = {
-    image: PexelImage;
-    quantity: number;
-};
+export type CartItem = z.infer<typeof CartItemSchema>;
+export type CheckoutFormData = z.infer<typeof CheckoutFormDataSchema>;
 
 export interface FavouriteDocument {
     _id?: string;            // MongoDB autogenerates this
@@ -51,6 +51,7 @@ export interface OrderDocument {
     customerDetails: CheckoutFormData;
     cartItems: CartItem[];
     paymentToken: string;           // token returned from /api/payment
+    orderTotal: number;             // server-computed total in GBP
     createdAt: Date;
     updatedAt?: Date;
 }
@@ -77,15 +78,6 @@ export type FindOneAndUpdateResult<T> =
     | T
     | null;
 
-export type CheckoutFormData = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    addressLine1: string;
-    addressLine2: string;
-    city: string;
-    postcode: string;
-};
 
 export type PaymentFormData = {
     cardholderName: string;
