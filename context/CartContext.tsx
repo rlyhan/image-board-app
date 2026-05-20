@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useReducer, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { PexelImage, CartItem } from '@/lib/types';
 
 type CartContextType = {
@@ -21,42 +21,55 @@ type CartAction =
     | { type: 'CLEAR_CART' }
     | { type: 'HYDRATE_CART'; payload: CartItem[] };
 
+type CartState = {
+    items: CartItem[];
+    isHydrated: boolean;
+};
+
+const INITIAL_STATE: CartState = { items: [], isHydrated: false };
+
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 const CART_STORAGE_KEY = 'shopping-cart';
 
-function cartReducer(state: CartItem[], action: CartAction): CartItem[] {
+function cartReducer(state: CartState, action: CartAction): CartState {
     switch (action.type) {
         case 'ADD_TO_CART': {
-            const existing = state.find((item) => item.image.id === action.payload.id);
+            const existing = state.items.find((item) => item.image.id === action.payload.id);
             if (existing) {
-                return state.map((item) =>
-                    item.image.id === action.payload.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                );
+                return {
+                    ...state,
+                    items: state.items.map((item) =>
+                        item.image.id === action.payload.id
+                            ? { ...item, quantity: item.quantity + 1 }
+                            : item
+                    ),
+                };
             }
-            return [...state, { image: action.payload, quantity: 1 }];
+            return { ...state, items: [...state.items, { image: action.payload, quantity: 1 }] };
         }
 
         case 'REMOVE_FROM_CART':
-            return state.filter((item) => item.image.id !== action.payload);
+            return { ...state, items: state.items.filter((item) => item.image.id !== action.payload) };
 
         case 'UPDATE_QUANTITY': {
             const { imageId, quantity } = action.payload;
             if (quantity <= 0) {
-                return state.filter((item) => item.image.id !== imageId);
+                return { ...state, items: state.items.filter((item) => item.image.id !== imageId) };
             }
-            return state.map((item) =>
-                item.image.id === imageId ? { ...item, quantity } : item
-            );
+            return {
+                ...state,
+                items: state.items.map((item) =>
+                    item.image.id === imageId ? { ...item, quantity } : item
+                ),
+            };
         }
 
         case 'CLEAR_CART':
-            return [];
+            return { ...state, items: [] };
 
         case 'HYDRATE_CART':
-            return action.payload;
+            return { items: action.payload, isHydrated: true };
 
         default:
             return state;
@@ -64,21 +77,20 @@ function cartReducer(state: CartItem[], action: CartAction): CartItem[] {
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cartItems, dispatch] = useReducer(cartReducer, []);
-    const [isHydrated, setIsHydrated] = useState(false);
+    const [{ items: cartItems, isHydrated }, dispatch] = useReducer(cartReducer, INITIAL_STATE);
 
-    // Load from localStorage on mount
+    // Load from localStorage on mount; dispatch also marks hydration complete.
     useEffect(() => {
+        let parsed: CartItem[] = [];
         const stored = localStorage.getItem(CART_STORAGE_KEY);
         if (stored) {
             try {
-                const parsed = JSON.parse(stored);
-                dispatch({ type: 'HYDRATE_CART', payload: parsed });
+                parsed = JSON.parse(stored);
             } catch (error) {
                 console.error('Failed to parse cart from localStorage:', error);
             }
         }
-        setIsHydrated(true);
+        dispatch({ type: 'HYDRATE_CART', payload: parsed });
     }, []);
 
     // Save to localStorage whenever cart changes
