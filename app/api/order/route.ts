@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CheckoutFormData, PaymentFormData, CartItem, OrderDocument } from "@/lib/types";
+import { CheckoutFormData, CartItem, OrderDocument } from "@/lib/types";
 import clientPromise from "@/lib/mongodb";
-import { validatePayment, generatePaymentToken } from "@/lib/payment";
 
 export const runtime = "nodejs";
 
-// Helper to get DB collection
 async function getOrdersCollection() {
     const client = await clientPromise;
     const db = client.db("imageboard");
@@ -14,19 +12,28 @@ async function getOrdersCollection() {
 
 export async function POST(req: NextRequest) {
     try {
-        const { customerDetails, paymentDetails, cartItems }: { customerDetails: CheckoutFormData; paymentDetails: PaymentFormData; cartItems: CartItem[] } = await req.json();
+        const { customerDetails, paymentToken, cartItems }: {
+            customerDetails: CheckoutFormData;
+            paymentToken: string;
+            cartItems: CartItem[];
+        } = await req.json();
+
         if (!cartItems || cartItems.length === 0) {
             return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
         }
-        if (!customerDetails || !paymentDetails) {
-            return NextResponse.json({ error: "Missing customer or payment details" }, { status: 400 });
+        if (!customerDetails) {
+            return NextResponse.json({ error: "Missing customer details" }, { status: 400 });
+        }
+        if (!paymentToken || typeof paymentToken !== "string") {
+            return NextResponse.json({ error: "Missing payment token" }, { status: 400 });
         }
 
-        const paymentError = validatePayment(paymentDetails);
-        if (paymentError) {
-            return NextResponse.json({ error: paymentError }, { status: 400 });
-        }
-        const paymentToken = generatePaymentToken();
+        // PRODUCTION: verify the payment with your gateway here, before writing to the DB.
+        // With Stripe this would be:
+        //   const intent = await stripe.paymentIntents.retrieve(paymentToken);
+        //   if (intent.status !== "succeeded") return 402;
+        // The client sends the PaymentIntent ID (from stripe.confirmPayment) instead of a
+        // self-generated token, so the server can independently confirm Stripe processed the charge.
 
         const orders = await getOrdersCollection();
         const result = await orders.insertOne({

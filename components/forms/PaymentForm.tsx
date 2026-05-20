@@ -4,6 +4,7 @@ import { useState, FormEvent } from 'react';
 import { PaymentFormData } from '@/lib/types';
 import { formatCardNumber, formatExpiryDate } from '@/lib/helpers/payment';
 import validate, { PaymentFormErrors } from '@/lib/validations/payment';
+import { validatePayment, generatePaymentToken } from '@/lib/payment';
 import Field from './Field';
 import { useOrder } from '@/context/OrderContext';
 import { useCart } from '@/context/CartContext';
@@ -41,11 +42,25 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
         e.preventDefault();
         setServerError(null);
 
+        // Client-side format validation
         const validationErrors = validate(formData);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
+
+        // Additional validation: expiry not in the past, card digits within expected range
+        const paymentError = validatePayment({
+            ...formData,
+            cardNumber: formData.cardNumber.replace(/\s/g, ''),
+        });
+        if (paymentError) {
+            setServerError(paymentError);
+            return;
+        }
+
+        // Tokenize client-side — raw card data never leaves the browser
+        const paymentToken = generatePaymentToken();
 
         setIsSubmitting(true);
 
@@ -55,20 +70,15 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     customerDetails: orderState.customerDetails,
-                    paymentDetails: {
-                        cardholderName: formData.cardholderName,
-                        cardNumber: formData.cardNumber.replace(/\s/g, ''),
-                        expiryDate: formData.expiryDate,
-                        securityCode: formData.securityCode,
-                    },
-                    cartItems: cartItems
+                    paymentToken,
+                    cartItems,
                 }),
             });
 
             const data = await response.json();
 
             if (!response.ok) {
-                setServerError(data.message || 'Payment failed. Please try again.');
+                setServerError(data.error || 'Payment failed. Please try again.');
                 return;
             }
 
