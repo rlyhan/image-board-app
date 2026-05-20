@@ -15,7 +15,8 @@ APP_BASE_URL=http://localhost:3000
 AUTH0_BASE_URL=http://localhost:3000
 AUTH0_DOMAIN=https://your-tenant.auth0.com
 AUTH0_CLIENT_ID=your-client-id
-AUTH0_SECRET=your-client-secret
+AUTH0_CLIENT_SECRET=your-client-secret
+AUTH0_SECRET=<output from openssl rand -hex 32>
 MONGODB_URI=mongodb+srv://<adminuser>:<adminpassword>@imageboardapp.nonohtz.mongodb.net/?appName=ImageBoardApp
 ```
 
