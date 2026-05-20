@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 import { defineConfig } from 'cypress';
 
 require('dotenv').config({
