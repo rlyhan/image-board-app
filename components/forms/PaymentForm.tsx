@@ -26,6 +26,7 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
     const [formData, setFormData] = useState<PaymentFormData>(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState<PaymentFormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isComplete, setIsComplete] = useState(false);
     const [serverError, setServerError] = useState<string | null>(null);
 
     const handleChange = (id: string, value: string) => {
@@ -79,18 +80,21 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
 
             if (!response.ok) {
                 setServerError(data.error || 'Payment failed. Please try again.');
+                setIsSubmitting(false);
                 return;
             }
 
+            setIsComplete(true);
             setSuccess();
             clearCart();
             onSuccess(data.orderId);
         } catch {
             setServerError('Something went wrong. Please try again.');
-        } finally {
             setIsSubmitting(false);
         }
     };
+
+    if (isComplete) return null;
 
     return (
         <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6 max-w-lg mx-auto">

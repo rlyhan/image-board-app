@@ -15,7 +15,9 @@ export default function PaymentPage() {
         return null;
     }
 
-    const handleSuccess = (orderId: string) => router.push(`/checkout/success?orderId=${orderId}`);
+    if (orderState.status === 'success') return null;
+
+    const handleSuccess = (orderId: string) => router.replace(`/checkout/success?orderId=${orderId}`);
 
     return (
         <Container containerSize="lg">
