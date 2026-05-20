@@ -1,10 +1,10 @@
 import { Container, Gallery } from "@/components";
-import { getCuratedPhotos } from "@/lib/client/pexels";
+import { fetchPhotos } from "@/lib/server/pexels";
 
 export const revalidate = 3600; // ISR (revalidate every hour)
 
 export default async function HomePage() {
-  const photos = await getCuratedPhotos();
+  const photos = await fetchPhotos();
   return (
     <main>
       {Array.isArray(photos) && photos.length > 0 ? (
