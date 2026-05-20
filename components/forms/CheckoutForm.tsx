@@ -24,11 +24,9 @@ export default function CheckoutForm({ onSuccess }: CheckoutFormProps) {
     const { updateCustomerDetails } = useOrder();
     const [formData, setFormData] = useState<CheckoutFormData>(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState<CheckoutFormErrors>({});
-    const [submitted, setSubmitted] = useState(false);
 
     const handleChange = (id: string, value: string) => {
         setFormData((prev) => ({ ...prev, [id]: value }));
-        // Clear error on change
         if (errors[id]) setErrors((prev) => ({ ...prev, [id]: undefined }));
     };
 
@@ -41,19 +39,9 @@ export default function CheckoutForm({ onSuccess }: CheckoutFormProps) {
             return;
         }
 
-        updateCustomerDetails(formData)
-        setSubmitted(true);
-    };
-
-    if (submitted) {
+        updateCustomerDetails(formData);
         onSuccess();
-        // return (
-        //     <div className="text-center py-12">
-        //         <p className="text-2xl font-semibold">Order placed!</p>
-        //         <p className="text-gray-500 mt-2">Thanks {formData.firstName}, we'll send a confirmation to {formData.email}.</p>
-        //     </div>
-        // );
-    }
+    };
 
     return (
         <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
