@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CheckoutFormData, CartItem, OrderDocument } from "@/lib/types";
 import clientPromise from "@/lib/mongodb";
+import { auth0 } from "@/lib/auth0";
 
 export const runtime = "nodejs";
 
@@ -11,6 +12,11 @@ async function getOrdersCollection() {
 }
 
 export async function POST(req: NextRequest) {
+    const session = await auth0.getSession(req);
+    if (!session?.user?.sub) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     try {
         const { customerDetails, paymentToken, cartItems }: {
             customerDetails: CheckoutFormData;
