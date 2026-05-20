@@ -1,10 +1,11 @@
 'use client';
 
-import { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useReducer, useEffect, useState, ReactNode } from 'react';
 import { PexelImage, CartItem } from '@/lib/types';
 
 type CartContextType = {
     cartItems: CartItem[];
+    isHydrated: boolean;
     addToCart: (image: PexelImage) => void;
     removeFromCart: (imageId: number) => void;
     updateQuantity: (imageId: number, quantity: number) => void;
@@ -64,6 +65,7 @@ function cartReducer(state: CartItem[], action: CartAction): CartItem[] {
 
 export function CartProvider({ children }: { children: ReactNode }) {
     const [cartItems, dispatch] = useReducer(cartReducer, []);
+    const [isHydrated, setIsHydrated] = useState(false);
 
     // Load from localStorage on mount
     useEffect(() => {
@@ -76,6 +78,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                 console.error('Failed to parse cart from localStorage:', error);
             }
         }
+        setIsHydrated(true);
     }, []);
 
     // Save to localStorage whenever cart changes
@@ -113,6 +116,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         <CartContext.Provider
             value={{
                 cartItems,
+                isHydrated,
                 addToCart,
                 removeFromCart,
                 updateQuantity,
