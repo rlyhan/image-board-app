@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { addToFavourites, removeFromFavourites } from "@/lib/client/favourites";
 import { PexelImage } from "@/lib/types";
 import { Button } from "@/components";
 import { useFavourites } from "@/context/FavouritesContext";
+import Heart from "@/components/icons/Heart";
 
 type FavouriteButtonProps = {
     image: PexelImage;
@@ -14,44 +14,50 @@ type FavouriteButtonProps = {
 export default function FavouriteButton({ image }: FavouriteButtonProps) {
     const { user } = useUser();
     const { setFavourites, isFavourite } = useFavourites();
-    const [loading, setLoading] = useState(false);
-    const [buttonLabel, setButtonLabel] = useState("");
 
     const currentlyFavourite = isFavourite(image.id);
 
-    useEffect(() => {
-        setButtonLabel(currentlyFavourite ? "Remove favourite" : "Favourite");
-    }, [currentlyFavourite]);
+    async function toggleFavourite(e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+        e.stopPropagation();
 
-    async function toggleFavourite() {
         if (!user) {
             alert("Please login.");
             return;
         }
 
-        setLoading(true);
+        // Optimistic update — flip state immediately
+        if (currentlyFavourite) {
+            setFavourites(prev => prev.filter(img => img.id !== image.id));
+        } else {
+            setFavourites(prev => [...prev, image]);
+        }
+
         try {
             if (currentlyFavourite) {
                 await removeFromFavourites(image.id);
-                setFavourites(prev => prev.filter(img => img.id !== image.id));
             } else {
                 await addToFavourites(image);
-                setFavourites(prev => [...prev, image]);
             }
         } catch (err) {
             console.error(err);
+            // Revert on failure
+            if (currentlyFavourite) {
+                setFavourites(prev => [...prev, image]);
+            } else {
+                setFavourites(prev => prev.filter(img => img.id !== image.id));
+            }
             alert("Failed to update favourite.");
-        } finally {
-            setLoading(false);
         }
     }
 
     return (
         <Button
             onClick={toggleFavourite}
-            label={loading ? "Updating..." : buttonLabel}
-            disabled={loading}
-            theme={currentlyFavourite ? "red" : "green"}
+            label={<Heart filled={currentlyFavourite} />}
+            variant="round"
+            theme="light"
+            additionalClasses="h-[42px] w-[42px] relative"
         />
     );
 }

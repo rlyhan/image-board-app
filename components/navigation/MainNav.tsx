@@ -23,7 +23,7 @@ export default function MainNav({ isAuthenticated = false }: MainNavProps) {
                     <Image src={logo} alt="" width={32} height={32} priority />
                     <span className="text-xl md:text-2xl">Image Board App</span>
                 </Link>
-                <ul className="mr-2 flex gap-5 md:gap-7 items-center">
+                <ul className="mr-2 flex gap-5 items-center">
                     <li className="flex">
                         <ButtonLink
                             href="/cart"
