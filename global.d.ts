@@ -1,3 +1,5 @@
+/// <reference types="next/image-types/global" />
+
 import { MongoClient } from "mongodb";
 
 declare global {
