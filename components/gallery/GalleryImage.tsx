@@ -22,8 +22,9 @@ export default function GalleryImage({ photo }: GalleryImageProps) {
             <Image
                 src={photo.src?.large2x || photo.src?.medium || ""}
                 alt={photo.alt || ""}
-                width={photo.width || 800}
-                height={photo.height || 600}
+                width={photo.width || 400}
+                height={photo.height || 400}
+                sizes="(max-width: 639px) calc(50vw - 8px), (max-width: 767px) calc(50vw - 16px), (max-width: 1023px) 33vw, 25vw"
                 loading="lazy"
                 className="w-full h-full object-cover"
             />
