@@ -31,16 +31,16 @@ export default function GalleryImage({ photo }: GalleryImageProps) {
                     loading="lazy"
                     className="w-full h-full object-cover"
                 />
+                <div className="flex items-center gap-2 absolute top-2 right-2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity duration-200 z-10">
+                    <AddCartButton image={photo} />
+                    <FavouriteButton image={photo} />
+                </div>
                 <button
                     type="button"
                     onClick={() => setModalOpen(true)}
                     aria-label={photo.alt ? `View ${photo.alt} larger` : "View image larger"}
                     className="absolute inset-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 />
-                <div className="flex items-center gap-2 absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                    <AddCartButton image={photo} />
-                    <FavouriteButton image={photo} />
-                </div>
             </div>
             {modalOpen && <GalleryImageModal photo={photo} onClose={closeModal} />}
         </>
