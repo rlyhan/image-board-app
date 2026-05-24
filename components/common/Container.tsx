@@ -15,7 +15,7 @@ const containerWidths = {
 export default function Container({ children, containerSize = "xl", additionalClasses }: ContainerProps) {
     return (
         <div
-            className={cn("mx-auto px-8", containerWidths[containerSize], additionalClasses)}
+            className={cn("mx-auto px-2 md:px-8", containerWidths[containerSize], additionalClasses)}
         >
             {children}
         </div>

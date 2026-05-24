@@ -4,9 +4,10 @@ type CartProps = {
 };
 
 const Cart = ({ includeQuantity = false, count = 0 }: CartProps) => (
-    <div className="relative inline-block">
+    <div className="relative inline-flex">
         <svg
             xmlns="http://www.w3.org/2000/svg"
+            className="block"
             width="24"
             height="24"
             viewBox="0 0 24 24"
