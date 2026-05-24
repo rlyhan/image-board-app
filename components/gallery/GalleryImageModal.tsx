@@ -8,20 +8,14 @@ import AddCartButton from "../cart/AddCartButton";
 
 type GalleryImageModalProps = {
     photo: PexelImage;
-    open: boolean;
     onClose: () => void;
 };
 
-export default function GalleryImageModal({ photo, open, onClose }: GalleryImageModalProps) {
+export default function GalleryImageModal({ photo, onClose }: GalleryImageModalProps) {
     const [imageLoaded, setImageLoaded] = useState(false);
     const dialogRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!open) {
-            setImageLoaded(false);
-            return;
-        }
-
         const previouslyFocused = document.activeElement as HTMLElement | null;
         dialogRef.current?.focus();
 
@@ -34,9 +28,7 @@ export default function GalleryImageModal({ photo, open, onClose }: GalleryImage
             window.removeEventListener("keydown", onKeyDown);
             previouslyFocused?.focus();
         };
-    }, [open, onClose]);
-
-    if (!open) return null;
+    }, [onClose]);
 
     return (
         <div

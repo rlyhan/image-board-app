@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
 import { PexelImage } from "@/lib/types";
 import FavouriteButton from "./FavouriteButton";
@@ -13,6 +13,7 @@ type GalleryImageProps = {
 
 export default function GalleryImage({ photo }: GalleryImageProps) {
     const [modalOpen, setModalOpen] = useState(false);
+    const closeModal = useCallback(() => setModalOpen(false), []);
     const rowSpan = Math.ceil(((photo.height || 400) / (photo.width || 400)) * 10);
 
     return (
@@ -41,7 +42,7 @@ export default function GalleryImage({ photo }: GalleryImageProps) {
                     <FavouriteButton image={photo} />
                 </div>
             </div>
-            <GalleryImageModal photo={photo} open={modalOpen} onClose={() => setModalOpen(false)} />
+            {modalOpen && <GalleryImageModal photo={photo} onClose={closeModal} />}
         </>
     );
 }
