@@ -58,6 +58,7 @@ export default function Button({
     additionalClasses,
     variant = "base",
     theme = "default",
+    ...rest
 }: ButtonProps) {
     return (
         <button
@@ -69,6 +70,7 @@ export default function Button({
                 themes[theme],
                 additionalClasses
             )}
+            {...rest}
         >
             {label}
         </button>
