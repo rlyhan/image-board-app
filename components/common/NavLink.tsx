@@ -7,7 +7,7 @@ type NavLinkProps = {
 }
 
 const buttonStyles = {
-    standard: "text-black hover:text-gray-900 py-2 px-4 transition-colors"
+    standard: "text-black hover:opacity-50 py-2 px-3 transition-colors"
 }
 
 export default function NavLink({ href, label, className }: NavLinkProps) {

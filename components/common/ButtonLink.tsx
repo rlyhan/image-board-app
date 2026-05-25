@@ -6,6 +6,7 @@ type ButtonLinkProps = {
     href: string;
     label: string | ReactNode;
     className?: string;
+    additionalClasses?: string;
     ariaLabel?: string;
 }
 

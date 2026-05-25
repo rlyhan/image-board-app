@@ -5,6 +5,7 @@ import Image from "next/image";
 import { User } from "@auth0/nextjs-auth0/types";
 import type { Profile } from "@/lib/types";
 import DashboardProfileForm from "./DashboardProfileForm";
+import { ButtonLink } from "../common";
 
 type DashboardHeaderProps = {
     user: User;
@@ -33,16 +34,22 @@ function DashboardHeader({ user, profile, onProfileUpdated }: DashboardHeaderPro
 
             <h2 className="text-2xl font-semibold mb-1">{displayName}</h2>
 
-            <div className="flex justify-between gap-4">
+            <div className="flex flex-col md:flex-row justify-between gap-4">
                 {bio && <p className="mt-2 text-gray-700">{bio}</p>}
 
-                <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition cursor-pointer"
-                    aria-label="Edit profile"
-                    onClick={() => setIsEditing(true)}
-                >
-                    Edit Profile
-                </button>
+                <div className="flex gap-2">
+                    <button
+                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition cursor-pointer"
+                        aria-label="Edit profile"
+                        onClick={() => setIsEditing(true)}
+                    >
+                        Edit Profile
+                    </button>
+
+                    <div className="flex md:hidden">
+                        <ButtonLink href="/auth/logout" label="Log Out" />
+                    </div>
+                </div>
             </div>
 
             <DashboardProfileForm
