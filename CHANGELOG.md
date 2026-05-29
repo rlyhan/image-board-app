@@ -4,6 +4,7 @@
 - Image fade-in on gallery load
 - Loading... text -> Loading spinner
 - Extract hover capability detection into reusable `useHoverCapable` hook via `useSyncExternalStore`
+- Stabilise gallery card compositor layers with `will-change` and `isolation`; defer load-more renders with `startTransition`; priority preload first 4 images
 ### Fixed
 - Deduplicate photos on load more
 

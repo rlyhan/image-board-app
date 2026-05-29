@@ -55,6 +55,8 @@ body {
   .gallery-card {
     transition: transform 0.3s ease;
     background: #171717;
+    will-change: transform;
+    isolation: isolate;
   }
 
   .gallery-card:hover {

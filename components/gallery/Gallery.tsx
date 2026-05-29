@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, startTransition } from "react";
 import { PexelImage } from "@/lib/types";
 import { getCuratedPhotos, searchPhotos } from "@/lib/client/pexels";
 import GalleryImage from "./GalleryImage";
@@ -23,11 +23,13 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
         setLoading(true);
         try {
             const newPhotos = await getCuratedPhotos(page + 1, 12);
-            setPhotos((prev) => {
-                const seen = new Set(prev.map((p) => p.id));
-                return [...prev, ...newPhotos.filter((p) => !seen.has(p.id))];
+            startTransition(() => {
+                setPhotos((prev) => {
+                    const seen = new Set(prev.map((p) => p.id));
+                    return [...prev, ...newPhotos.filter((p) => !seen.has(p.id))];
+                });
+                setPage((prev) => prev + 1);
             });
-            setPage((prev) => prev + 1);
         } finally {
             setLoading(false);
         }
@@ -58,8 +60,8 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
                 <GallerySearch onSearch={handleSearch} />
             )}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 auto-rows-[16px] sm:auto-rows-[12px]">
-                {photos.map((photo) => (
-                    <GalleryImage key={photo.id} photo={photo} />
+                {photos.map((photo, index) => (
+                    <GalleryImage key={photo.id} photo={photo} priority={index < 4} />
                 ))}
                 {!disableLoadMore && <div ref={sentinelRef} className="h-10" />}
                 {loading && (

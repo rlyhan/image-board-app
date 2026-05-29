@@ -10,9 +10,10 @@ import GalleryImageModal from "./GalleryImageModal";
 
 type GalleryImageProps = {
     photo: PexelImage;
+    priority?: boolean;
 }
 
-export default function GalleryImage({ photo }: GalleryImageProps) {
+export default function GalleryImage({ photo, priority = false }: GalleryImageProps) {
     const [modalOpen, setModalOpen] = useState(false);
     const closeModal = useCallback(() => setModalOpen(false), []);
     const naturalRatio = (photo.height || 400) / (photo.width || 400);
@@ -50,7 +51,7 @@ export default function GalleryImage({ photo }: GalleryImageProps) {
         width: photo.width || 400,
         height: photo.height || 400,
         sizes: "(max-width: 639px) calc(50vw - 8px), (max-width: 767px) calc(50vw - 16px), (max-width: 1023px) 33vw, 25vw",
-        loading: "lazy" as const,
+        ...(priority ? { priority: true } : { loading: "lazy" as const }),
     };
 
     return (
