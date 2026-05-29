@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, startTransition } from "react";
 import { PexelImage } from "@/lib/types";
 import { getCuratedPhotos, searchPhotos } from "@/lib/client/pexels";
 import GalleryImage from "./GalleryImage";
@@ -14,40 +14,72 @@ type GalleryProps = {
 
 export default function Gallery({ initialPhotos, includeSearch, disableLoadMore }: GalleryProps) {
     const [photos, setPhotos] = useState<PexelImage[]>(initialPhotos);
-    const [page, setPage] = useState(1);
+    const [, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [isIntersecting, setIsIntersecting] = useState(false);
+    const [hasMore, setHasMore] = useState(true);
     const sentinelRef = useRef<HTMLDivElement | null>(null);
+    const observerRef = useRef<IntersectionObserver | null>(null);
+    const loadingRef = useRef(false);
+    const pageRef = useRef(1);
 
     const loadMore = useCallback(async () => {
-        if (loading || disableLoadMore) return;
+        if (loadingRef.current || disableLoadMore || !hasMore) return;
+        loadingRef.current = true;
         setLoading(true);
         try {
-            const newPhotos = await getCuratedPhotos(page + 1, 12);
-            setPhotos((prev) => [...prev, ...newPhotos]);
-            setPage((prev) => prev + 1);
+            const nextPage = pageRef.current + 1;
+            const newPhotos = await getCuratedPhotos(nextPage, 12);
+            if (newPhotos.length === 0) {
+                setHasMore(false);
+                return;
+            }
+            pageRef.current = nextPage;
+            startTransition(() => {
+                setPhotos((prev) => {
+                    const seen = new Set(prev.map((p) => p.id));
+                    return [...prev, ...newPhotos.filter((p) => !seen.has(p.id))];
+                });
+                setPage(nextPage);
+            });
         } finally {
+            loadingRef.current = false;
             setLoading(false);
+            // Re-observe to force an intersection check — IO only fires on state
+            // changes, so if the sentinel is still in view after adding images it
+            // would silently stall without this.
+            if (sentinelRef.current && observerRef.current) {
+                observerRef.current.unobserve(sentinelRef.current);
+                observerRef.current.observe(sentinelRef.current);
+            }
         }
-    }, [loading, page, disableLoadMore]);
+    }, [disableLoadMore, hasMore]);
 
-    const handleSearch = async (query: string) => {
+    const handleSearch = useCallback(async (query: string) => {
         if (disableLoadMore) return;
         const results = await searchPhotos(query);
         setPhotos(results);
-    };
+    }, [disableLoadMore]);
 
-    // Intersection Observer
     useEffect(() => {
         if (!sentinelRef.current || disableLoadMore) return;
 
         const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) loadMore();
+            const intersecting = entries[0].isIntersecting;
+            setIsIntersecting(intersecting);
+            if (intersecting) loadMore();
         });
 
+        observerRef.current = observer;
         observer.observe(sentinelRef.current);
 
-        return () => observer.disconnect();
+        return () => {
+            observer.disconnect();
+            observerRef.current = null;
+        };
     }, [loadMore, disableLoadMore]);
+
+    const showSpinner = !disableLoadMore && hasMore && (loading || isIntersecting);
 
     return (
         <div className="mb-10">
@@ -55,12 +87,19 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
                 <GallerySearch onSearch={handleSearch} />
             )}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 auto-rows-[16px] sm:auto-rows-[12px]">
-                {photos.map((photo) => (
-                    <GalleryImage key={photo.id} photo={photo} />
+                {photos.map((photo, index) => (
+                    <GalleryImage key={photo.id} photo={photo} priority={index < 8} />
                 ))}
                 {!disableLoadMore && <div ref={sentinelRef} className="h-10" />}
-                {loading && <p className="col-span-full text-center">Loading...</p>}
             </div>
+            {showSpinner && (
+                <div className="flex justify-center mt-14">
+                    <div role="status" aria-live="polite">
+                        <span className="sr-only">Loading more images</span>
+                        <div aria-hidden="true" className="w-10 h-10 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
