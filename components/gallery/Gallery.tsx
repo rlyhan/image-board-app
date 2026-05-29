@@ -23,7 +23,10 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
         setLoading(true);
         try {
             const newPhotos = await getCuratedPhotos(page + 1, 12);
-            setPhotos((prev) => [...prev, ...newPhotos]);
+            setPhotos((prev) => {
+                const seen = new Set(prev.map((p) => p.id));
+                return [...prev, ...newPhotos.filter((p) => !seen.has(p.id))];
+            });
             setPage((prev) => prev + 1);
         } finally {
             setLoading(false);
