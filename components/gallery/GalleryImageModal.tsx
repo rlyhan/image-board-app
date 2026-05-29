@@ -18,6 +18,7 @@ export default function GalleryImageModal({ photo, onClose }: GalleryImageModalP
     useEffect(() => {
         const previouslyFocused = document.activeElement as HTMLElement | null;
         dialogRef.current?.focus();
+        document.body.style.overflow = "hidden";
 
         const onKeyDown = (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose();
@@ -26,6 +27,7 @@ export default function GalleryImageModal({ photo, onClose }: GalleryImageModalP
 
         return () => {
             window.removeEventListener("keydown", onKeyDown);
+            document.body.style.overflow = "";
             previouslyFocused?.focus();
         };
     }, [onClose]);
