@@ -48,11 +48,12 @@ export default function GalleryImageModal({ photo, onClose }: GalleryImageModalP
 
             <div className="relative flex items-center justify-center max-h-[80vh] sm:max-h-[90vh] max-w-full">
                 <Image
-                    src={photo.src?.original || photo.src?.large2x || photo.src?.large || ""}
+                    src={photo.src?.large2x || photo.src?.large || ""}
                     alt={photo.alt || ""}
                     width={photo.width || 1200}
                     height={photo.height || 800}
                     sizes="100vw"
+                    priority
                     onLoad={() => setImageLoaded(true)}
                     className={`w-auto h-auto max-h-[80vh] sm:max-h-[90vh] max-w-full object-contain rounded-lg transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
                 />

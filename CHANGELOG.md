@@ -5,6 +5,7 @@
 - Loading... text -> Loading spinner
 - Extract hover capability detection into reusable `useHoverCapable` hook via `useSyncExternalStore`
 - Stabilise gallery card compositor layers with `will-change` and `isolation`; defer load-more renders with `startTransition`; priority preload first 4 images
+- Expand priority preload to first 8 images for better LCP coverage; modal uses `large2x` source with high-priority loading
 ### Fixed
 - Deduplicate photos on load more
 

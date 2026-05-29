@@ -61,7 +61,7 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
             )}
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 auto-rows-[16px] sm:auto-rows-[12px]">
                 {photos.map((photo, index) => (
-                    <GalleryImage key={photo.id} photo={photo} priority={index < 4} />
+                    <GalleryImage key={photo.id} photo={photo} priority={index < 8} />
                 ))}
                 {!disableLoadMore && <div ref={sentinelRef} className="h-10" />}
                 {loading && (
