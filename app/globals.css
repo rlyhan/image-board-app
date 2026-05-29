@@ -53,23 +53,26 @@ body {
 /* Gallery card hover effects — desktop only */
 @media (hover: hover) {
   .gallery-card {
-    transition: transform 0.3s ease;
+    transition: transform 0.08s ease-out;
     background: #171717;
     will-change: transform;
     isolation: isolate;
+    z-index: 0;
   }
 
   .gallery-card:hover {
     transform: scale(1.17) translateY(-2px);
-    z-index: 20;
+    z-index: 30;
+    transition: transform 0.3s ease 0.1s, z-index 0s 0.1s;
   }
 
   .gallery-card:hover .gallery-frame {
     clip-path: inset(0 0 0 0 round 0.5rem);
+    transition: clip-path 0.3s ease;
   }
 }
 
 .gallery-frame {
   clip-path: inset(var(--clip-pct, 0%) 0 var(--clip-pct, 0%) 0 round 0.5rem);
-  transition: clip-path 0.3s ease;
+  transition: clip-path 0.08s ease-out;
 }
