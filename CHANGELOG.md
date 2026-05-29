@@ -1,3 +1,50 @@
+## [1.10.0] - 2026-05-25
+### Added
+- Gallery image lightbox modal
+- Add to cart toast and button tick on add
+### Fixed
+- setState in modal effect via mount/unmount
+- Add-to-cart as first button in gallery card
+- Nav responsiveness
+- Search bar accessibility
+
+## [1.9.0] - 2026-05-24
+### Added
+- Favicon and metadata
+- Nav logo and mobile login logo
+### Changed
+- Grid image sizing/layout optimised for mobile
+- Favourite button replaced with heart
+### Fixed
+- Next image types in global.d.ts for CI typecheck
+
+## [1.8.0] - 2026-05-21
+### Fixed
+- Drop baseURL to resolve against origin
+
+## [1.7.0] - 2026-05-20
+### Added
+- Authentication required for checkout routes
+- Server-side order validation
+- Cypress tests handle Auth0
+### Changed
+- Update README
+- Fold isHydrated into cart reducer to eliminate setState-in-effect
+### Fixed
+- Mock tokenization replacing raw card detail submission
+- Payment form flash between submission and success redirect
+- Require hydrated cart for checkout steps, customer details before payment
+- Call onSuccess in event handler, not render body
+- Correct Auth0 secret variable name
+- Update Auth0 client secret in CI
+- Fetch initial photos from server, not client
+- Eslint disables for cypress
+- Cypress env vars before steps
+
+## [1.6.0] - 2026-03-09
+### Added
+- AGENTS.md
+
 ## [1.5.0] - 2026-03-03
 ### Added
 - Payment route call before order route call
