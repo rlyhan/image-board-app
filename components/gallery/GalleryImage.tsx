@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { PexelImage } from "@/lib/types";
+import { useHoverCapable } from "@/hooks/useHoverCapable";
 import FavouriteButton from "./FavouriteButton";
 import AddCartButton from "../cart/AddCartButton";
 import GalleryImageModal from "./GalleryImageModal";
@@ -17,35 +18,31 @@ export default function GalleryImage({ photo }: GalleryImageProps) {
     const naturalRatio = (photo.height || 400) / (photo.width || 400);
     const rowSpan = Math.ceil(naturalRatio * 10);
 
-    const [isHoverCapable, setIsHoverCapable] = useState(false);
-    const cardRef = useRef<HTMLDivElement>(null);
-    const [clipPct, setClipPct] = useState(0);
+    const isHoverCapable = useHoverCapable();
 
-    // useLayoutEffect runs before paint — sets both flags in one batched update to avoid a flash
-    useLayoutEffect(() => {
-        const hover = window.matchMedia("(hover: hover)").matches;
-        if (hover) {
-            const el = cardRef.current!;
-            const imgH = el.offsetWidth * naturalRatio;
-            const cardH = el.offsetHeight;
-            setClipPct(imgH > cardH ? (imgH - cardH) / (2 * imgH) * 100 : 0);
-        }
-        setIsHoverCapable(hover);
+    const cardRef = useRef<HTMLDivElement>(null);
+    const frameRef = useRef<HTMLDivElement>(null);
+
+    const updateClipVar = useCallback(() => {
+        if (!cardRef.current || !frameRef.current) return;
+        const imgH = cardRef.current.offsetWidth * naturalRatio;
+        const cardH = cardRef.current.offsetHeight;
+        const pct = imgH > cardH ? (imgH - cardH) / (2 * imgH) * 100 : 0;
+        frameRef.current.style.setProperty("--clip-pct", `${pct.toFixed(2)}%`);
     }, [naturalRatio]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!isHoverCapable) return;
+        updateClipVar();
+    }, [isHoverCapable, updateClipVar]);
+
+    useEffect(() => {
+        if (!isHoverCapable || !cardRef.current) return;
         const el = cardRef.current;
-        if (!el) return;
-        const update = () => {
-            const imgH = el.offsetWidth * naturalRatio;
-            const cardH = el.offsetHeight;
-            setClipPct(imgH > cardH ? (imgH - cardH) / (2 * imgH) * 100 : 0);
-        };
-        const ro = new ResizeObserver(update);
+        const ro = new ResizeObserver(updateClipVar);
         ro.observe(el);
         return () => ro.disconnect();
-    }, [isHoverCapable, naturalRatio]);
+    }, [isHoverCapable, updateClipVar]);
 
     const imgProps = {
         src: photo.src?.large2x || photo.src?.medium || "",
@@ -68,8 +65,8 @@ export default function GalleryImage({ photo }: GalleryImageProps) {
             >
                 {isHoverCapable ? (
                     <div
+                        ref={frameRef}
                         className="gallery-frame absolute left-0 top-1/2 -translate-y-1/2 w-full pointer-events-none z-10"
-                        style={{ "--clip-pct": `${clipPct.toFixed(2)}%` } as React.CSSProperties}
                     >
                         <Image {...imgProps} className="w-full h-auto pointer-events-none" />
                         <div className="gallery-hover-overlay absolute inset-0 bg-black/15 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

@@ -3,6 +3,7 @@
 - Gallery image hover reveals full aspect ratio via animated clip-path frame
 - Image fade-in on gallery load
 - Loading... text -> Loading spinner
+- Extract hover capability detection into reusable `useHoverCapable` hook via `useSyncExternalStore`
 ### Fixed
 - Deduplicate photos on load more
 
