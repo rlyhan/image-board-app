@@ -62,7 +62,14 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
                     <GalleryImage key={photo.id} photo={photo} />
                 ))}
                 {!disableLoadMore && <div ref={sentinelRef} className="h-10" />}
-                {loading && <p className="col-span-full text-center">Loading...</p>}
+                {loading && (
+                    <div className="col-span-full flex justify-center py-4">
+                        <div role="status" aria-live="polite">
+                            <span className="sr-only">Loading more images</span>
+                            <div aria-hidden="true" className="w-10 h-10 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -19,7 +19,16 @@ export default function Dashboard({
     const [profile, setProfile] = useState<Profile | null>(initialProfile);
     const [favourites] = useState<PexelImage[]>(initialFavourites);
 
-    if (isLoading) return <Container>Loading...</Container>;
+    if (isLoading) return (
+        <Container>
+            <div className="flex justify-center py-12">
+                <div role="status" aria-live="polite">
+                    <span className="sr-only">Loading</span>
+                    <div aria-hidden="true" className="w-10 h-10 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+                </div>
+            </div>
+        </Container>
+    );
     if (error) return <Container>Error: {error.message}</Container>;
     if (!user) return <Container>Please log in.</Container>;
 
