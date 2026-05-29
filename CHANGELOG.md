@@ -1,3 +1,11 @@
+## [1.11.0] - 2026-05-29
+### Changed
+- Gallery image hover reveals full aspect ratio via animated clip-path frame
+- Image fade-in on gallery load
+- Loading... text -> Loading spinner
+### Fixed
+- Deduplicate photos on load more
+
 ## [1.10.0] - 2026-05-25
 ### Added
 - Gallery image lightbox modal
