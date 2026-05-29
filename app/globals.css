@@ -70,6 +70,19 @@ body {
     clip-path: inset(0 0 0 0 round 0.5rem);
     transition: clip-path 0.3s ease;
   }
+
+  /* Exit: fade out faster than the 0.08s scale-down so elements clear before being clipped */
+  .gallery-hover-actions,
+  .gallery-hover-overlay {
+    transition: opacity 0.05s ease;
+  }
+  /* Enter: restore the slower fade-in with delay */
+  .gallery-card:hover .gallery-hover-actions {
+    transition: opacity 0.2s ease 0.1s;
+  }
+  .gallery-card:hover .gallery-hover-overlay {
+    transition: opacity 0.3s ease 0.1s;
+  }
 }
 
 .gallery-frame {

@@ -1,19 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { lazy, memo, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { PexelImage } from "@/lib/types";
 import { useHoverCapable } from "@/hooks/useHoverCapable";
 import FavouriteButton from "./FavouriteButton";
 import AddCartButton from "../cart/AddCartButton";
-import GalleryImageModal from "./GalleryImageModal";
+
+const GalleryImageModal = lazy(() => import("./GalleryImageModal"));
 
 type GalleryImageProps = {
     photo: PexelImage;
     priority?: boolean;
 }
 
-export default function GalleryImage({ photo, priority = false }: GalleryImageProps) {
+function GalleryImage({ photo, priority = false }: GalleryImageProps) {
     const [modalOpen, setModalOpen] = useState(false);
     const closeModal = useCallback(() => setModalOpen(false), []);
     const naturalRatio = (photo.height || 400) / (photo.width || 400);
@@ -29,7 +30,11 @@ export default function GalleryImage({ photo, priority = false }: GalleryImagePr
         const imgH = cardRef.current.offsetWidth * naturalRatio;
         const cardH = cardRef.current.offsetHeight;
         const pct = imgH > cardH ? (imgH - cardH) / (2 * imgH) * 100 : 0;
-        frameRef.current.style.setProperty("--clip-pct", `${pct.toFixed(2)}%`);
+        const frame = frameRef.current;
+        frame.style.transition = "none";
+        frame.style.setProperty("--clip-pct", `${pct.toFixed(2)}%`);
+        frame.offsetHeight; // flush style to prevent transition from firing
+        frame.style.transition = "";
     }, [naturalRatio]);
 
     useLayoutEffect(() => {
@@ -70,8 +75,8 @@ export default function GalleryImage({ photo, priority = false }: GalleryImagePr
                         className="gallery-frame absolute left-0 top-1/2 -translate-y-1/2 w-full pointer-events-none z-10"
                     >
                         <Image {...imgProps} className="w-full h-auto pointer-events-none" />
-                        <div className="gallery-hover-overlay absolute inset-0 bg-black/15 opacity-0 transition-opacity duration-300 delay-100 group-hover:opacity-100" />
-                        <div className="gallery-hover-actions flex items-center gap-2 absolute top-2 right-2 opacity-0 group-hover:opacity-100 group-has-[*:focus-visible]:opacity-100 pointer-events-none group-hover:pointer-events-auto group-has-[*:focus-visible]:pointer-events-auto transition-opacity duration-200 delay-100">
+                        {/* <div className="gallery-hover-overlay absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100" /> */}
+                        <div className="gallery-hover-actions flex items-center gap-2 absolute top-2 right-2 opacity-0 group-hover:opacity-100 group-has-[*:focus-visible]:opacity-100 pointer-events-none group-hover:pointer-events-auto group-has-[*:focus-visible]:pointer-events-auto">
                             <AddCartButton image={photo} />
                             <FavouriteButton image={photo} />
                         </div>
@@ -92,7 +97,20 @@ export default function GalleryImage({ photo, priority = false }: GalleryImagePr
                     className="absolute inset-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 />
             </div>
-            {modalOpen && <GalleryImageModal photo={photo} onClose={closeModal} />}
+            {modalOpen && (
+                <Suspense fallback={
+                    <div
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 cursor-default"
+                        onClick={closeModal}
+                    >
+                        <div aria-hidden="true" className="w-10 h-10 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+                    </div>
+                }>
+                    <GalleryImageModal photo={photo} onClose={closeModal} />
+                </Suspense>
+            )}
         </>
     );
 }
+
+export default memo(GalleryImage);
