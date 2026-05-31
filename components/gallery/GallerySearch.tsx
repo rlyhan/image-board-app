@@ -4,9 +4,10 @@ import { useState, useEffect, useRef } from "react";
 
 type SearchBarProps = {
     onSearch: (query: string) => void;
+    onQueryChange?: () => void;
 };
 
-export default function SearchBar({ onSearch }: SearchBarProps) {
+export default function SearchBar({ onSearch, onQueryChange }: SearchBarProps) {
     const [query, setQuery] = useState("");
     const [focused, setFocused] = useState(false);
     const [hovered, setHovered] = useState(false);
@@ -59,7 +60,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
                 <input
                     type="text"
                     value={query}
-                    onChange={(e) => setQuery(e.target.value)}
+                    onChange={(e) => { setQuery(e.target.value); onQueryChange?.(); }}
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                     placeholder="Search for images..."

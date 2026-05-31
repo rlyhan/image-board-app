@@ -12,16 +12,19 @@ type GalleryProps = {
     disableLoadMore?: boolean;
 };
 
+
 export default function Gallery({ initialPhotos, includeSearch, disableLoadMore }: GalleryProps) {
     const [photos, setPhotos] = useState<PexelImage[]>(initialPhotos);
     const [, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [isIntersecting, setIsIntersecting] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [galleryVisible, setGalleryVisible] = useState(true);
     const sentinelRef = useRef<HTMLDivElement | null>(null);
     const observerRef = useRef<IntersectionObserver | null>(null);
     const loadingRef = useRef(false);
     const pageRef = useRef(1);
+    const searchIdRef = useRef(0);
 
     const loadMore = useCallback(async () => {
         if (loadingRef.current || disableLoadMore || !hasMore) return;
@@ -55,10 +58,17 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
         }
     }, [disableLoadMore, hasMore]);
 
+    const handleQueryChange = useCallback(() => {
+        setGalleryVisible(false);
+    }, []);
+
     const handleSearch = useCallback(async (query: string) => {
         if (disableLoadMore) return;
+        const id = ++searchIdRef.current;
         const results = await searchPhotos(query);
+        if (id !== searchIdRef.current) return;
         setPhotos(results);
+        requestAnimationFrame(() => setGalleryVisible(true));
     }, [disableLoadMore]);
 
     useEffect(() => {
@@ -84,9 +94,9 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
     return (
         <div className="mb-10">
             {includeSearch && !disableLoadMore && (
-                <GallerySearch onSearch={handleSearch} />
+                <GallerySearch onSearch={handleSearch} onQueryChange={handleQueryChange} />
             )}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 auto-rows-[16px] sm:auto-rows-[12px]">
+            <div className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 auto-rows-[16px] sm:auto-rows-[12px] transition-opacity duration-200 ${galleryVisible ? "opacity-100" : "opacity-0"}`}>
                 {photos.map((photo, index) => (
                     <GalleryImage key={photo.id} photo={photo} priority={index < 8} />
                 ))}
