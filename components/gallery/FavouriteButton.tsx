@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useCurrentUser } from "@/context/UserContext";
 import { addToFavourites, removeFromFavourites } from "@/lib/client/favourites";
 import { PexelImage } from "@/lib/types";
 import { Button } from "@/components";
@@ -12,7 +12,7 @@ type FavouriteButtonProps = {
 };
 
 export default function FavouriteButton({ image }: FavouriteButtonProps) {
-    const { user } = useUser();
+    const user = useCurrentUser();
     const { setFavourites, isFavourite } = useFavourites();
 
     const currentlyFavourite = isFavourite(image.id);

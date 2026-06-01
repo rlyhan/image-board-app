@@ -22,7 +22,7 @@ describe('Checkout Journey', () => {
 
         // force: true bypasses opacity-0 — the button is only visible on parent
         // :hover, which Cypress can't trigger reliably via synthetic events.
-        cy.get('.group').first().find('button').first().click({ force: true });
+        cy.get('.gallery-card').first().find('button').first().click({ force: true });
         // Surface a lost click here rather than failing three steps later in /cart.
         cy.get('header').contains('1').should('be.visible');
 

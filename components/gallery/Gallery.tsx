@@ -12,16 +12,20 @@ type GalleryProps = {
     disableLoadMore?: boolean;
 };
 
+
 export default function Gallery({ initialPhotos, includeSearch, disableLoadMore }: GalleryProps) {
     const [photos, setPhotos] = useState<PexelImage[]>(initialPhotos);
     const [, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [isIntersecting, setIsIntersecting] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [galleryVisible, setGalleryVisible] = useState(true);
+    const [searchAnnouncement, setSearchAnnouncement] = useState("");
     const sentinelRef = useRef<HTMLDivElement | null>(null);
     const observerRef = useRef<IntersectionObserver | null>(null);
     const loadingRef = useRef(false);
     const pageRef = useRef(1);
+    const searchIdRef = useRef(0);
 
     const loadMore = useCallback(async () => {
         if (loadingRef.current || disableLoadMore || !hasMore) return;
@@ -57,8 +61,20 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
 
     const handleSearch = useCallback(async (query: string) => {
         if (disableLoadMore) return;
-        const results = await searchPhotos(query);
-        setPhotos(results);
+        const id = ++searchIdRef.current;
+        setGalleryVisible(false);
+        setSearchAnnouncement("");
+        try {
+            const results = await searchPhotos(query);
+            if (id !== searchIdRef.current) return;
+            setPhotos(results);
+            requestAnimationFrame(() => {
+                setGalleryVisible(true);
+                setSearchAnnouncement(`${results.length} result${results.length !== 1 ? "s" : ""} for "${query}"`);
+            });
+        } catch {
+            if (id === searchIdRef.current) setGalleryVisible(true);
+        }
     }, [disableLoadMore]);
 
     useEffect(() => {
@@ -86,12 +102,16 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
             {includeSearch && !disableLoadMore && (
                 <GallerySearch onSearch={handleSearch} />
             )}
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 auto-rows-[16px] sm:auto-rows-[12px]">
+            <div
+                aria-hidden={!galleryVisible}
+                className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 auto-rows-[16px] sm:auto-rows-[12px] transition-opacity duration-200 motion-reduce:transition-none ${galleryVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            >
                 {photos.map((photo, index) => (
                     <GalleryImage key={photo.id} photo={photo} priority={index < 8} />
                 ))}
                 {!disableLoadMore && <div ref={sentinelRef} className="h-10" />}
             </div>
+            <div role="status" aria-live="polite" className="sr-only">{searchAnnouncement}</div>
             {showSpinner && (
                 <div className="flex justify-center mt-14">
                     <div role="status" aria-live="polite">

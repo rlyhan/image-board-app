@@ -60,13 +60,15 @@ body {
     z-index: 0;
   }
 
-  .gallery-card:hover {
+  .gallery-card:hover,
+  .gallery-card:has(*:focus-visible) {
     transform: scale(1.17) translateY(-2px);
     z-index: 30;
     transition: transform 0.3s ease 0.1s, z-index 0s 0.1s;
   }
 
-  .gallery-card:hover .gallery-frame {
+  .gallery-card:hover .gallery-frame,
+  .gallery-card:has(*:focus-visible) .gallery-frame {
     clip-path: inset(0 0 0 0 round 0.5rem);
     transition: clip-path 0.3s ease;
   }
@@ -77,7 +79,8 @@ body {
     transition: opacity 0.05s ease;
   }
   /* Enter: restore the slower fade-in with delay */
-  .gallery-card:hover .gallery-hover-actions {
+  .gallery-card:hover .gallery-hover-actions,
+  .gallery-card:has(*:focus-visible) .gallery-hover-actions {
     transition: opacity 0.2s ease 0.1s;
   }
   .gallery-card:hover .gallery-hover-overlay {
