@@ -1,3 +1,8 @@
+## [1.12.1] - 2026-06-01
+### Fixed
+- Remove gallery hover state after modal closed
+- Correct gallery image selector for e2e test 
+
 ## [1.12.0] - 2026-05-31
 ### Changed
 - Smoother looking searchbar with transitions on interaction

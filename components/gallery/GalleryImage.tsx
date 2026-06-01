@@ -65,7 +65,7 @@ function GalleryImage({ photo, priority = false }: GalleryImageProps) {
                 ref={cardRef}
                 className={isHoverCapable
                     ? "rounded-lg relative group gallery-card"
-                    : "overflow-hidden rounded-lg relative group"
+                    : "overflow-hidden rounded-lg relative group gallery-card"
                 }
                 style={{ gridRowEnd: `span ${rowSpan}` }}
             >
