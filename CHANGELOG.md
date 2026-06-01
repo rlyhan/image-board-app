@@ -1,3 +1,12 @@
+## [1.12.0] - 2026-05-31
+### Changed
+- Smoother looking searchbar with transitions on interaction
+- Search on type
+- Transitions in between search queries
+### Fixed
+- Seed Auth0 user from server to avoid redundant profile request on page load
+- Gallery and search bar accessibility
+
 ## [1.11.0] - 2026-05-29
 ### Changed
 - Gallery image hover reveals full aspect ratio via animated clip-path frame
