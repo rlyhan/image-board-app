@@ -10,12 +10,13 @@ export default function CartPage() {
     const { cartItems, getCartTotal, updateQuantity, removeFromCart } = useCart();
     const itemCount = getCartTotal();
     const subtotal = itemCount * ITEM_PRICE;
+    const itemLabel = `${itemCount} ${itemCount === 1 ? "item" : "items"}`;
 
     if (!cartItems.length) {
         return (
             <Container>
                 <div className="py-24 flex flex-col items-center text-center gap-4">
-                    <p className="text-2xl font-semibold text-gray-900">Your cart is empty</p>
+                    <h1 className="text-2xl font-semibold text-gray-900">Your cart is empty</h1>
                     <p className="text-sm text-gray-400">Browse the gallery to find prints you love.</p>
                     <Link
                         href="/"
@@ -32,8 +33,8 @@ export default function CartPage() {
         <Container>
             <div className="py-6 md:py-10">
                 <h1 className="text-2xl font-bold text-gray-900 mb-1">Your Cart</h1>
-                <p className="text-sm text-gray-400 mb-8">
-                    {itemCount} {itemCount === 1 ? "item" : "items"}
+                <p className="text-sm text-gray-400 mb-8" aria-hidden="true">
+                    {itemLabel}
                 </p>
 
                 <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
@@ -48,7 +49,7 @@ export default function CartPage() {
                             href="/"
                             className="inline-block mt-6 text-sm text-gray-400 hover:text-gray-700 transition-colors"
                         >
-                            ← Continue shopping
+                            <span aria-hidden="true">← </span>Continue shopping
                         </Link>
                     </div>
 
@@ -59,7 +60,7 @@ export default function CartPage() {
 
                             <div className="flex flex-col gap-3 text-sm">
                                 <div className="flex justify-between text-gray-600">
-                                    <span>Subtotal ({itemCount} {itemCount === 1 ? "item" : "items"})</span>
+                                    <span>Subtotal ({itemLabel})</span>
                                     <span className="font-medium text-gray-900">£{subtotal.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-gray-600">
@@ -78,7 +79,7 @@ export default function CartPage() {
                                 className="mt-5 w-full flex items-center justify-center gap-2 bg-gray-900 text-white text-sm font-semibold py-3.5 rounded-md hover:bg-gray-700 active:bg-gray-800 transition-colors"
                             >
                                 Proceed to checkout
-                                <span aria-hidden>→</span>
+                                <span aria-hidden="true">→</span>
                             </Link>
 
                             <p className="text-center text-xs text-gray-400 mt-3">Secure checkout · SSL encrypted</p>
