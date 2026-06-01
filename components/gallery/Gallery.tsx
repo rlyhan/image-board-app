@@ -20,6 +20,7 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
     const [isIntersecting, setIsIntersecting] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [galleryVisible, setGalleryVisible] = useState(true);
+    const [searchAnnouncement, setSearchAnnouncement] = useState("");
     const sentinelRef = useRef<HTMLDivElement | null>(null);
     const observerRef = useRef<IntersectionObserver | null>(null);
     const loadingRef = useRef(false);
@@ -58,17 +59,22 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
         }
     }, [disableLoadMore, hasMore]);
 
-    const handleQueryChange = useCallback(() => {
-        setGalleryVisible(false);
-    }, []);
-
     const handleSearch = useCallback(async (query: string) => {
         if (disableLoadMore) return;
         const id = ++searchIdRef.current;
-        const results = await searchPhotos(query);
-        if (id !== searchIdRef.current) return;
-        setPhotos(results);
-        requestAnimationFrame(() => setGalleryVisible(true));
+        setGalleryVisible(false);
+        setSearchAnnouncement("");
+        try {
+            const results = await searchPhotos(query);
+            if (id !== searchIdRef.current) return;
+            setPhotos(results);
+            requestAnimationFrame(() => {
+                setGalleryVisible(true);
+                setSearchAnnouncement(`${results.length} result${results.length !== 1 ? "s" : ""} for "${query}"`);
+            });
+        } catch {
+            if (id === searchIdRef.current) setGalleryVisible(true);
+        }
     }, [disableLoadMore]);
 
     useEffect(() => {
@@ -94,14 +100,18 @@ export default function Gallery({ initialPhotos, includeSearch, disableLoadMore 
     return (
         <div className="mb-10">
             {includeSearch && !disableLoadMore && (
-                <GallerySearch onSearch={handleSearch} onQueryChange={handleQueryChange} />
+                <GallerySearch onSearch={handleSearch} />
             )}
-            <div className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 auto-rows-[16px] sm:auto-rows-[12px] transition-opacity duration-200 ${galleryVisible ? "opacity-100" : "opacity-0"}`}>
+            <div
+                aria-hidden={!galleryVisible}
+                className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 auto-rows-[16px] sm:auto-rows-[12px] transition-opacity duration-200 motion-reduce:transition-none ${galleryVisible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            >
                 {photos.map((photo, index) => (
                     <GalleryImage key={photo.id} photo={photo} priority={index < 8} />
                 ))}
                 {!disableLoadMore && <div ref={sentinelRef} className="h-10" />}
             </div>
+            <div role="status" aria-live="polite" className="sr-only">{searchAnnouncement}</div>
             {showSpinner && (
                 <div className="flex justify-center mt-14">
                     <div role="status" aria-live="polite">

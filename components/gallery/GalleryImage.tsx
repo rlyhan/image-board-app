@@ -94,7 +94,11 @@ function GalleryImage({ photo, priority = false }: GalleryImageProps) {
                     type="button"
                     onClick={() => setModalOpen(true)}
                     aria-label={photo.alt ? `View ${photo.alt} larger` : "View image larger"}
-                    className="absolute inset-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    className={isHoverCapable
+                        ? "absolute left-0 top-1/2 -translate-y-1/2 w-full cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                        : "absolute inset-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    }
+                    style={isHoverCapable ? { aspectRatio: `${photo.width} / ${photo.height}` } : undefined}
                 />
             </div>
             {modalOpen && (
