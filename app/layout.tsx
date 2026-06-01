@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { auth0 } from "@/lib/auth0";
+import { UserProvider } from "@/context/UserContext";
 import "./globals.css";
 import { MainNav } from "@/components";
 import { FavouritesProvider } from "@/context/FavouritesContext";
@@ -34,14 +35,16 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CartProvider>
-          <ToastProvider>
-            <MainNav isAuthenticated={!!user} />
-            <FavouritesProvider>
-              {children}
-            </FavouritesProvider>
-          </ToastProvider>
-        </CartProvider>
+        <UserProvider user={user}>
+          <CartProvider>
+            <ToastProvider>
+              <MainNav isAuthenticated={!!user} />
+              <FavouritesProvider>
+                {children}
+              </FavouritesProvider>
+            </ToastProvider>
+          </CartProvider>
+        </UserProvider>
       </body>
     </html>
   );
