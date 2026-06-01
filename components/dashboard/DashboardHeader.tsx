@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { User } from "@auth0/nextjs-auth0/types";
 import type { Profile } from "@/lib/types";
 import DashboardProfileForm from "./DashboardProfileForm";
-import { ButtonLink } from "../common";
 
 type DashboardHeaderProps = {
     user: User;
@@ -21,34 +21,45 @@ function DashboardHeader({ user, profile, onProfileUpdated }: DashboardHeaderPro
     const bio = profile?.bio?.trim() || null;
 
     return (
-        <div className="mb-4">
-            {displayPicture && (
-                <Image
-                    src={displayPicture}
-                    alt={displayName}
-                    height={48}
-                    width={48}
-                    className="w-24 h-24 rounded-full border border-gray-300 mb-4"
-                />
-            )}
+        <div className="mb-8">
+            <div className="flex items-center gap-4 p-4 sm:p-5 rounded-xl border border-gray-200 bg-gray-50/70 shadow-sm">
+                {displayPicture ? (
+                    <Image
+                        src={displayPicture}
+                        alt={displayName}
+                        height={64}
+                        width={64}
+                        className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-white shadow-sm shrink-0 object-cover"
+                    />
+                ) : (
+                    <div
+                        role="img"
+                        aria-label={displayName}
+                        className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-white shadow-sm shrink-0 bg-gray-200 flex items-center justify-center text-xl font-semibold text-gray-500 select-none"
+                    >
+                        {displayName.charAt(0).toUpperCase()}
+                    </div>
+                )}
 
-            <h2 className="text-2xl font-semibold mb-1">{displayName}</h2>
+                <div className="flex-1 min-w-0">
+                    <h2 className="text-base font-semibold truncate">{displayName}</h2>
+                    {bio && <p className="text-sm text-gray-500 mt-0.5 line-clamp-2">{bio}</p>}
+                </div>
 
-            <div className="flex flex-col md:flex-row justify-between gap-4">
-                {bio && <p className="mt-2 text-gray-700">{bio}</p>}
-
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shrink-0">
                     <button
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition cursor-pointer"
+                        className="text-sm px-3 py-1.5 border border-gray-300 rounded-lg bg-white hover:bg-gray-100 transition-colors font-medium cursor-pointer"
                         aria-label="Edit profile"
                         onClick={() => setIsEditing(true)}
                     >
                         Edit Profile
                     </button>
-
-                    <div className="flex md:hidden">
-                        <ButtonLink href="/auth/logout" label="Log Out" />
-                    </div>
+                    <Link
+                        href="/auth/logout"
+                        className="text-sm px-3 py-1.5 border border-gray-300 rounded-lg bg-white hover:bg-gray-100 transition-colors font-medium text-center md:hidden"
+                    >
+                        Log Out
+                    </Link>
                 </div>
             </div>
 
