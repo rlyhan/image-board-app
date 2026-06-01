@@ -29,7 +29,7 @@ describe('Checkout Journey', () => {
         cy.get('a[href="/cart"]').click();
         cy.url().should('include', '/cart');
 
-        cy.contains('a', 'Checkout').click();
+        cy.contains('a', 'Proceed to checkout').click();
         cy.url().should('include', '/checkout');
 
         cy.get('#firstName').type('Jane');
