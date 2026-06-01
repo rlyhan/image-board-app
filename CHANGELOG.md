@@ -1,3 +1,10 @@
+## [1.13.0] - 2026-06-01
+### Added
+- Dashboard favourites count
+### Changed
+- Dashboard profile card style
+
+
 ## [1.12.1] - 2026-06-01
 ### Fixed
 - Remove gallery hover state after modal closed

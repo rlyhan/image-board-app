@@ -25,7 +25,17 @@ export default function Dashboard({
         <Container>
             <DashboardHeader user={user} profile={profile} onProfileUpdated={(p) => setProfile(p)} />
 
-            {favourites.length ? <Gallery initialPhotos={favourites} disableLoadMore /> : null}
+            {favourites.length ? (
+                <div>
+                    <div className="flex items-baseline gap-2 mb-4">
+                        <h3 className="text-sm font-semibold tracking-wide uppercase text-gray-500">Favourites</h3>
+                        <span className="text-sm text-gray-500" aria-label={`${favourites.length} favourites`}>{favourites.length}</span>
+                    </div>
+                    <Gallery initialPhotos={favourites} disableLoadMore />
+                </div>
+            ) : (
+                <p className="text-sm text-gray-400 mt-2">No favourites yet.</p>
+            )}
         </Container>
     );
 }
