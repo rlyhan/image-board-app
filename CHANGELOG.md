@@ -1,9 +1,15 @@
+## [1.14.0] - 2026-06-01
+### Changed
+- Cart page restyle
+- Cart products clickable for modal
+### Fixed
+- Nav and main element semantics
+
 ## [1.13.0] - 2026-06-01
 ### Added
 - Dashboard favourites count
 ### Changed
 - Dashboard profile card style
-
 
 ## [1.12.1] - 2026-06-01
 ### Fixed
