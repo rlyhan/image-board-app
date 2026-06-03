@@ -16,7 +16,6 @@ export default function FavouriteButton({ image }: FavouriteButtonProps) {
     const isFav = useFavouritesStore((s) => s.isFavourite(image.id));
     const addFavourite = useFavouritesStore((s) => s.addFavourite);
     const removeFavourite = useFavouritesStore((s) => s.removeFavourite);
-    const setFavourites = useFavouritesStore((s) => s.setFavourites);
 
     async function toggleFavourite(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
@@ -45,7 +44,7 @@ export default function FavouriteButton({ image }: FavouriteButtonProps) {
             // Revert on failure by re-fetching the source of truth
             const { getFavourites } = await import("@/lib/client/favourites");
             getFavourites()
-                .then((favs) => setFavourites(favs))
+                .then((favs) => useFavouritesStore.getState().setFavourites(favs))
                 .catch(() => {});
             alert("Failed to update favourite.");
         }
