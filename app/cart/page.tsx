@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Container } from "@/components";
 import Cart from "@/components/cart/Cart";
-import { useCartStore, selectCartTotal } from "@/context/CartContext";
+import { useCartStore, selectCartTotal } from "@/context/cartStore";
 import { ITEM_PRICE } from "@/lib/config";
 
 export default function CartPage() {

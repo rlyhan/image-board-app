@@ -7,7 +7,7 @@ import validate, { PaymentFormErrors } from '@/lib/validations/payment';
 import { validatePayment, generatePaymentToken } from '@/lib/payment';
 import Field from './Field';
 import { useOrder } from '@/context/OrderContext';
-import { useCartStore } from '@/context/CartContext';
+import { useCartStore } from '@/context/cartStore';
 
 const INITIAL_FORM_STATE: PaymentFormData = {
     cardholderName: '',

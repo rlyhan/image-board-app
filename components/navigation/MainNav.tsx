@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ButtonLink, NavLink } from "../common";
 import Cart from "../icons/Cart";
 import Person from "../icons/Person";
-import { useCartStore, selectCartTotal } from "@/context/CartContext";
+import { useCartStore, selectCartTotal } from "@/context/cartStore";
 import logo from "@/app/logo.png";
 
 type MainNavProps = {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCartStore, selectItemQuantity } from '@/context/CartContext';
+import { useCartStore, selectItemQuantity } from '@/context/cartStore';
 import { useToast } from '@/context/ToastContext';
 import { PexelImage } from '@/lib/types';
 import Button from '../common/Button';

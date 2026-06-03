@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container } from "@/components";
 import CheckoutForm from "@/components/forms/CheckoutForm";
-import { useCartStore } from '@/context/CartContext';
+import { useCartStore } from '@/context/cartStore';
 
 export default function CheckoutPage() {
     const router = useRouter();

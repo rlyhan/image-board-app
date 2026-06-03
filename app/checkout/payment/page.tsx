@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container } from "@/components";
 import { useOrder } from '@/context/OrderContext';
-import { useCartStore } from '@/context/CartContext';
+import { useCartStore } from '@/context/cartStore';
 import PaymentForm from "@/components/forms/PaymentForm";
 
 export default function PaymentPage() {

@@ -4,8 +4,8 @@ import { auth0 } from "@/lib/auth0";
 import { UserProvider } from "@/context/UserContext";
 import "./globals.css";
 import { MainNav } from "@/components";
-import { FavouritesProvider } from "@/context/FavouritesContext";
-import { CartProvider } from "@/context/CartContext";
+import { FavouritesProvider } from "@/context/favouritesStore";
+import { CartProvider } from "@/context/cartStore";
 import { ToastProvider } from "@/context/ToastContext";
 
 const geistSans = Geist({

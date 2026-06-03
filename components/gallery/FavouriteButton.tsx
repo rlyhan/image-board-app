@@ -4,7 +4,7 @@ import { useCurrentUser } from "@/context/UserContext";
 import { addToFavourites, removeFromFavourites } from "@/lib/client/favourites";
 import { PexelImage } from "@/lib/types";
 import { Button } from "@/components";
-import { useFavouritesStore } from "@/context/FavouritesContext";
+import { useFavouritesStore } from "@/context/favouritesStore";
 import Heart from "@/components/icons/Heart";
 
 type FavouriteButtonProps = {
