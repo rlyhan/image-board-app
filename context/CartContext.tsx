@@ -12,15 +12,13 @@ type CartStore = {
     removeFromCart: (imageId: number) => void;
     updateQuantity: (imageId: number, quantity: number) => void;
     clearCart: () => void;
-    getCartTotal: () => number;
-    getItemQuantity: (imageId: number) => number;
 };
 
 const CART_STORAGE_KEY = 'shopping-cart';
 
 export const useCartStore = create<CartStore>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             items: [],
             isHydrated: false,
 
@@ -55,11 +53,6 @@ export const useCartStore = create<CartStore>()(
                 })),
 
             clearCart: () => set({ items: [] }),
-
-            getCartTotal: () => get().items.reduce((total, item) => total + item.quantity, 0),
-
-            getItemQuantity: (imageId) =>
-                get().items.find((item) => item.image.id === imageId)?.quantity ?? 0,
         }),
         {
             name: CART_STORAGE_KEY,
@@ -75,6 +68,12 @@ export const useCartStore = create<CartStore>()(
         }
     )
 );
+
+export const selectCartTotal = (s: CartStore) =>
+    s.items.reduce((total, item) => total + item.quantity, 0);
+
+export const selectItemQuantity = (imageId: number) => (s: CartStore) =>
+    s.items.find((item) => item.image.id === imageId)?.quantity ?? 0;
 
 // Triggers client-side hydration from localStorage once, after mount.
 export function CartProvider({ children }: { children: ReactNode }) {

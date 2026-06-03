@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { Container } from "@/components";
 import Cart from "@/components/cart/Cart";
-import { useCartStore } from "@/context/CartContext";
+import { useCartStore, selectCartTotal } from "@/context/CartContext";
 import { ITEM_PRICE } from "@/lib/config";
 
 export default function CartPage() {
     const cartItems = useCartStore((s) => s.items);
     const updateQuantity = useCartStore((s) => s.updateQuantity);
     const removeFromCart = useCartStore((s) => s.removeFromCart);
-    const itemCount = useCartStore((s) => s.getCartTotal());
+    const itemCount = useCartStore(selectCartTotal);
     const subtotal = itemCount * ITEM_PRICE;
     const itemLabel = `${itemCount} ${itemCount === 1 ? "item" : "items"}`;
 
