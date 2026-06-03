@@ -6,6 +6,9 @@ import {
     useState,
     useCallback,
     useEffect,
+    useRef,
+    useMemo,
+    memo,
     ReactNode,
 } from 'react';
 
@@ -22,9 +25,9 @@ type ToastContextType = {
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 const DISPLAY_DURATION = 2800;   // how long the toast stays visible
-const EXIT_DURATION    = 250;    // must match .toast-exit animation duration
+const EXIT_DURATION = 250;    // must match .toast-exit animation duration
 
-function ToastItem({ message, exiting }: { message: string; exiting: boolean }) {
+const ToastItem = memo(function ToastItem({ message, exiting }: { message: string; exiting: boolean }) {
     return (
         <div
             role="status"
@@ -35,7 +38,6 @@ function ToastItem({ message, exiting }: { message: string; exiting: boolean }) 
                 pointer-events-none select-none whitespace-nowrap
                 ${exiting ? 'toast-exit' : 'toast-enter'}`}
         >
-            {/* inline checkmark so no extra import inside context */}
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -53,41 +55,39 @@ function ToastItem({ message, exiting }: { message: string; exiting: boolean }) 
             {message}
         </div>
     );
-}
+});
 
 export function ToastProvider({ children }: { children: ReactNode }) {
     const [toasts, setToasts] = useState<ToastEntry[]>([]);
+    const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+    const nextId = useRef(0);
+
+    // Clear all pending timers on unmount.
+    useEffect(() => () => timersRef.current.forEach(clearTimeout), []);
 
     const showToast = useCallback((message: string) => {
-        const id = Date.now();
+        const id = nextId.current++;
         setToasts(prev => [...prev, { id, message, exiting: false }]);
-    }, []);
 
-    // Handle the display → exit → remove lifecycle for each toast
-    useEffect(() => {
-        if (toasts.length === 0) return;
-
-        const latest = toasts[toasts.length - 1];
-        if (latest.exiting) return; // already scheduled for removal
-
-        const exitTimer = setTimeout(() => {
-            setToasts(prev =>
-                prev.map(t => t.id === latest.id ? { ...t, exiting: true } : t)
-            );
+        // Each toast owns its own timers set at creation time. Keeping them
+        // outside useEffect avoids the cleanup-clears-removeTimer bug where
+        // a [toasts] effect cleanup would cancel the remove timer as soon as
+        // the exit animation started.
+        const t1 = setTimeout(() => {
+            setToasts(prev => prev.map(t => t.id === id ? { ...t, exiting: true } : t));
         }, DISPLAY_DURATION);
 
-        const removeTimer = setTimeout(() => {
-            setToasts(prev => prev.filter(t => t.id !== latest.id));
+        const t2 = setTimeout(() => {
+            setToasts(prev => prev.filter(t => t.id !== id));
         }, DISPLAY_DURATION + EXIT_DURATION);
 
-        return () => {
-            clearTimeout(exitTimer);
-            clearTimeout(removeTimer);
-        };
-    }, [toasts]);
+        timersRef.current.push(t1, t2);
+    }, []);
+
+    const value = useMemo(() => ({ showToast }), [showToast]);
 
     return (
-        <ToastContext.Provider value={{ showToast }}>
+        <ToastContext.Provider value={value}>
             {children}
             {toasts.map(toast => (
                 <ToastItem key={toast.id} message={toast.message} exiting={toast.exiting} />

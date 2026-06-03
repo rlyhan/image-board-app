@@ -1,9 +1,14 @@
+## [1.14.0] - 2026-06-03
+### Changed
+- Migrate cart and favourites state from React Context to Zustand
+### Fixed
+- Toast lifecycle bug where the remove timer was cancelled by effect cleanup as soon as the exit animation started, causing toasts to accumulate and never disappear
+
 ## [1.13.0] - 2026-06-01
 ### Added
 - Dashboard favourites count
 ### Changed
 - Dashboard profile card style
-
 
 ## [1.12.1] - 2026-06-01
 ### Fixed

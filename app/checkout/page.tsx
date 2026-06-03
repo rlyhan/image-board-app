@@ -4,11 +4,12 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container } from "@/components";
 import CheckoutForm from "@/components/forms/CheckoutForm";
-import { useCart } from '@/context/CartContext';
+import { useCartStore } from '@/context/CartContext';
 
 export default function CheckoutPage() {
     const router = useRouter();
-    const { cartItems, isHydrated } = useCart();
+    const cartItems = useCartStore((s) => s.items);
+    const isHydrated = useCartStore((s) => s.isHydrated);
 
     useEffect(() => {
         if (isHydrated && cartItems.length === 0) router.replace('/cart');

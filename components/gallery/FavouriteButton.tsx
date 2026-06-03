@@ -4,7 +4,7 @@ import { useCurrentUser } from "@/context/UserContext";
 import { addToFavourites, removeFromFavourites } from "@/lib/client/favourites";
 import { PexelImage } from "@/lib/types";
 import { Button } from "@/components";
-import { useFavourites } from "@/context/FavouritesContext";
+import { useFavouritesStore } from "@/context/FavouritesContext";
 import Heart from "@/components/icons/Heart";
 
 type FavouriteButtonProps = {
@@ -13,9 +13,10 @@ type FavouriteButtonProps = {
 
 export default function FavouriteButton({ image }: FavouriteButtonProps) {
     const user = useCurrentUser();
-    const { setFavourites, isFavourite } = useFavourites();
-
-    const currentlyFavourite = isFavourite(image.id);
+    const isFav = useFavouritesStore((s) => s.isFavourite(image.id));
+    const addFavourite = useFavouritesStore((s) => s.addFavourite);
+    const removeFavourite = useFavouritesStore((s) => s.removeFavourite);
+    const setFavourites = useFavouritesStore((s) => s.setFavourites);
 
     async function toggleFavourite(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
@@ -26,27 +27,26 @@ export default function FavouriteButton({ image }: FavouriteButtonProps) {
             return;
         }
 
-        // Optimistic update — flip state immediately
-        if (currentlyFavourite) {
-            setFavourites(prev => prev.filter(img => img.id !== image.id));
+        // Optimistic update
+        if (isFav) {
+            removeFavourite(image.id);
         } else {
-            setFavourites(prev => [...prev, image]);
+            addFavourite(image);
         }
 
         try {
-            if (currentlyFavourite) {
+            if (isFav) {
                 await removeFromFavourites(image.id);
             } else {
                 await addToFavourites(image);
             }
         } catch (err) {
             console.error(err);
-            // Revert on failure
-            if (currentlyFavourite) {
-                setFavourites(prev => [...prev, image]);
-            } else {
-                setFavourites(prev => prev.filter(img => img.id !== image.id));
-            }
+            // Revert on failure by re-fetching the source of truth
+            const { getFavourites } = await import("@/lib/client/favourites");
+            getFavourites()
+                .then((favs) => setFavourites(favs))
+                .catch(() => {});
             alert("Failed to update favourite.");
         }
     }
@@ -54,7 +54,7 @@ export default function FavouriteButton({ image }: FavouriteButtonProps) {
     return (
         <Button
             onClick={toggleFavourite}
-            label={<Heart filled={currentlyFavourite} />}
+            label={<Heart filled={isFav} />}
             variant="round"
             theme="light"
             additionalClasses="h-[42px] w-[42px] relative"

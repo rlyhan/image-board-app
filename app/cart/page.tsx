@@ -2,12 +2,15 @@
 
 import { ButtonLink, Container } from "@/components";
 import Cart from "@/components/cart/Cart";
-import { useCart } from "@/context/CartContext";
+import { useCartStore } from "@/context/CartContext";
 import { ITEM_PRICE } from "@/lib/config";
 
 export default function CartPage() {
-    const { cartItems, getCartTotal, updateQuantity, removeFromCart } = useCart();
-    const formattedCartTotal = `Total: £${getCartTotal() * ITEM_PRICE}.00`
+    const cartItems = useCartStore((s) => s.items);
+    const updateQuantity = useCartStore((s) => s.updateQuantity);
+    const removeFromCart = useCartStore((s) => s.removeFromCart);
+    const cartTotal = useCartStore((s) => s.getCartTotal());
+    const formattedCartTotal = `Total: £${cartTotal * ITEM_PRICE}.00`
 
     return (
         <Container>

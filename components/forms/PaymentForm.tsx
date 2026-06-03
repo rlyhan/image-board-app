@@ -7,7 +7,7 @@ import validate, { PaymentFormErrors } from '@/lib/validations/payment';
 import { validatePayment, generatePaymentToken } from '@/lib/payment';
 import Field from './Field';
 import { useOrder } from '@/context/OrderContext';
-import { useCart } from '@/context/CartContext';
+import { useCartStore } from '@/context/CartContext';
 
 const INITIAL_FORM_STATE: PaymentFormData = {
     cardholderName: '',
@@ -21,7 +21,8 @@ type PaymentFormProps = {
 };
 
 export default function PaymentForm({ onSuccess }: PaymentFormProps) {
-    const { cartItems, clearCart } = useCart();
+    const cartItems = useCartStore((s) => s.items);
+    const clearCart = useCartStore((s) => s.clearCart);
     const { orderState, setSuccess } = useOrder();
     const [formData, setFormData] = useState<PaymentFormData>(INITIAL_FORM_STATE);
     const [errors, setErrors] = useState<PaymentFormErrors>({});

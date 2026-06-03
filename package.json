@@ -1,6 +1,6 @@
 {
   "name": "image-board-app",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -22,7 +22,8 @@
     "next": "^15.5.9",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
