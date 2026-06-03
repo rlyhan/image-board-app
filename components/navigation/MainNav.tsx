@@ -24,12 +24,14 @@ export default function MainNav({ isAuthenticated = false }: MainNavProps) {
                     <span className="text-xl md:text-2xl">Image Board App</span>
                 </Link>
                 <ul className="flex gap-5 items-center mr-2 md:mr-0">
-                    <ButtonLink
-                        href="/cart"
-                        label={<Cart includeQuantity={cartTotal > 0} count={cartTotal} />}
-                        className="inline-flex hover:opacity-50 md:px-3"
-                        ariaLabel={isHydrated && cartTotal > 0 ? `Cart, ${cartTotal} item${cartTotal === 1 ? "" : "s"}` : "Cart"}
-                    />
+                    <li>
+                        <ButtonLink
+                            href="/cart"
+                            label={<Cart includeQuantity={cartTotal > 0} count={cartTotal} />}
+                            className="inline-flex hover:opacity-50 md:px-3"
+                            ariaLabel={isHydrated && cartTotal > 0 ? `Cart, ${cartTotal} item${cartTotal === 1 ? "" : "s"}` : "Cart"}
+                        />
+                    </li>
                     {isAuthenticated ?
                         (<>
                             <li className="flex hidden md:block">

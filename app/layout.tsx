@@ -40,7 +40,7 @@ export default async function RootLayout({
             <ToastProvider>
               <MainNav isAuthenticated={!!user} />
               <FavouritesProvider>
-                {children}
+                <main>{children}</main>
               </FavouritesProvider>
             </ToastProvider>
           </CartProvider>
