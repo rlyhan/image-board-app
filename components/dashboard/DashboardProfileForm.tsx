@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Profile } from "@/lib/types";
-import { updateProfile } from "@/lib/client/profile";
-import { profileToDTO } from "@/lib/server/profile.mapper";
+import { updateProfile } from "@/app/actions/profile";
 import { Modal } from "../common";
 
 type DashboardProfileFormProps = {
@@ -54,8 +53,9 @@ export default function DashboardProfileForm({
         setError(null);
 
         try {
-            const updated = await updateProfile({ username, avatarUrl, bio });
-            onSaved(profileToDTO(updated));
+            const result = await updateProfile({ username, avatarUrl, bio });
+            if (!result.success) throw new Error(result.error);
+            onSaved(result.profile);
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : "Failed to update profile";
             setError(message);

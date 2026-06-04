@@ -1,3 +1,8 @@
+## [1.16.0] - 2026-06-04
+### Changed
+- Replace `POST /api/order` API route with a `createOrder` server action. The route was an internal endpoint only ever called by `PaymentForm` — converting it removes the HTTP boundary, giving end-to-end TypeScript types across the call and eliminating the manual `fetch`/JSON/status-code glue in the component. Integration tests now call the action function directly rather than wrapping payloads in `NextRequest`.
+- Replace `PATCH /api/profile` API route with an `updateProfile` server action for the same reason. The `GET /api/profile` route and `lib/client/profile.ts` are also removed — the GET was already dead since the dashboard page fetches the profile directly as a Server Component.
+
 ## [1.15.1] - 2026-06-04
 ### Fixed
 - Auth login/logout links use plain anchors to avoid Next.js RSC prefetch CORS errors

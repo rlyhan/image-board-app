@@ -61,6 +61,12 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
             return;
         }
 
+        const { customerDetails } = orderState;
+        if (!customerDetails) {
+            setServerError('Missing customer details. Please go back and complete checkout.');
+            return;
+        }
+
         // Tokenize client-side — raw card data never leaves the browser
         const paymentToken = generatePaymentToken();
 
@@ -71,7 +77,7 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    customerDetails: orderState.customerDetails,
+                    customerDetails,
                     paymentToken,
                     cartItems,
                 }),
