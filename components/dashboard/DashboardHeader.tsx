@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { User } from "@auth0/nextjs-auth0/types";
 import type { Profile } from "@/lib/types";
 import DashboardProfileForm from "./DashboardProfileForm";
@@ -54,12 +53,15 @@ function DashboardHeader({ user, profile, onProfileUpdated }: DashboardHeaderPro
                     >
                         Edit Profile
                     </button>
-                    <Link
+                    {/* Plain anchor: /auth/logout redirects to Auth0, so a full
+                        browser navigation is required (a Next.js <Link> would
+                        fetch the RSC payload and hit a cross-origin CORS block). */}
+                    <a
                         href="/auth/logout"
                         className="text-sm px-3 py-1.5 border border-gray-300 rounded-lg bg-white hover:bg-gray-100 transition-colors font-medium text-center md:hidden"
                     >
                         Log Out
-                    </Link>
+                    </a>
                 </div>
             </div>
 

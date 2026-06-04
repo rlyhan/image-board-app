@@ -41,15 +41,15 @@ export default function MainNav({ isAuthenticated = false }: MainNavProps) {
                                 <ButtonLink href="/dashboard" label={<Person />} className="inline-flex hover:opacity-50" ariaLabel="Dashboard" />
                             </li>
                             <li className="flex hidden md:block">
-                                <NavLink href="/auth/logout" label="Log Out" />
+                                <NavLink href="/auth/logout" label="Log Out" external />
                             </li>
                         </>) :
                         (<>
                             <li className="flex md:hidden">
-                                <ButtonLink href="/auth/login" label={<Person />} className="inline-flex hover:opacity-50" ariaLabel="Log in" />
+                                <ButtonLink href="/auth/login" label={<Person />} className="inline-flex hover:opacity-50" ariaLabel="Log in" external />
                             </li>
                             <li className="hidden md:block">
-                                <ButtonLink href="/auth/login" label="Log In" />
+                                <ButtonLink href="/auth/login" label="Log In" external />
                             </li>
                         </>)}
                 </ul>

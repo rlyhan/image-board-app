@@ -1,3 +1,7 @@
+## [1.15.1] - 2026-06-04
+### Fixed
+- Auth login/logout links use plain anchors to avoid Next.js RSC prefetch CORS errors
+
 ## [1.15.0] - 2026-06-03
 ### Changed
 - Migrate cart and favourites state from React Context to Zustand
