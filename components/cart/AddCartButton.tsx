@@ -1,6 +1,6 @@
 'use client';
 
-import { useCart } from '@/context/CartContext';
+import { useCartStore, selectItemQuantity } from '@/context/cartStore';
 import { useToast } from '@/context/ToastContext';
 import { PexelImage } from '@/lib/types';
 import Button from '../common/Button';
@@ -12,9 +12,9 @@ type AddCartButtonProps = {
 };
 
 export default function AddCartButton({ image }: AddCartButtonProps) {
-    const { addToCart, getItemQuantity } = useCart();
+    const addToCart = useCartStore((s) => s.addToCart);
+    const quantity = useCartStore(selectItemQuantity(image.id));
     const { showToast } = useToast();
-    const quantity = getItemQuantity(image.id);
     const inCart = quantity > 0;
 
     function handleAddToCart(e: React.MouseEvent<HTMLButtonElement>) {

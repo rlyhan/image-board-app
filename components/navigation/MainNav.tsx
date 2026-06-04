@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ButtonLink, NavLink } from "../common";
 import Cart from "../icons/Cart";
 import Person from "../icons/Person";
-import { useCart } from "@/context/CartContext";
+import { useCartStore, selectCartTotal } from "@/context/cartStore";
 import logo from "@/app/logo.png";
 
 type MainNavProps = {
@@ -13,8 +13,8 @@ type MainNavProps = {
 }
 
 export default function MainNav({ isAuthenticated = false }: MainNavProps) {
-    const { getCartTotal, isHydrated } = useCart();
-    const cartTotal = getCartTotal()
+    const cartTotal = useCartStore(selectCartTotal);
+    const isHydrated = useCartStore((s) => s.isHydrated);
 
     return (
         <header data-cart-hydrated={isHydrated ? "true" : "false"}>

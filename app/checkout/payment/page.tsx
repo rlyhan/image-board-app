@@ -4,12 +4,13 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container } from "@/components";
 import { useOrder } from '@/context/OrderContext';
-import { useCart } from '@/context/CartContext';
+import { useCartStore } from '@/context/cartStore';
 import PaymentForm from "@/components/forms/PaymentForm";
 
 export default function PaymentPage() {
     const { orderState } = useOrder();
-    const { cartItems, isHydrated } = useCart();
+    const cartItems = useCartStore((s) => s.items);
+    const isHydrated = useCartStore((s) => s.isHydrated);
     const router = useRouter();
 
     useEffect(() => {
