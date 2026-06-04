@@ -8,7 +8,6 @@ import { validatePayment, generatePaymentToken } from '@/lib/payment';
 import Field from './Field';
 import { useOrder } from '@/context/OrderContext';
 import { useCartStore } from '@/context/cartStore';
-import { createOrder } from '@/app/actions/order';
 
 const INITIAL_FORM_STATE: PaymentFormData = {
     cardholderName: '',
@@ -74,14 +73,20 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
         setIsSubmitting(true);
 
         try {
-            const result = await createOrder({
-                customerDetails,
-                paymentToken,
-                cartItems,
+            const response = await fetch('/api/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    customerDetails,
+                    paymentToken,
+                    cartItems,
+                }),
             });
 
-            if (!result.success) {
-                setServerError(result.error || 'Payment failed. Please try again.');
+            const data = await response.json();
+
+            if (!response.ok) {
+                setServerError(data.error || 'Payment failed. Please try again.');
                 setIsSubmitting(false);
                 return;
             }
@@ -89,7 +94,7 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
             setIsComplete(true);
             setSuccess();
             clearCart();
-            onSuccess(result.orderId);
+            onSuccess(data.orderId);
         } catch {
             setServerError('Something went wrong. Please try again.');
             setIsSubmitting(false);

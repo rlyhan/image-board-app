@@ -8,18 +8,9 @@ describe('Checkout Journey', () => {
         // real Pexels photos in mid-test. Initial gallery is still SSR'd from real Pexels.
         cy.intercept('GET', '/api/pexels*', { statusCode: 200, body: { photos: [] } });
 
-        // Server actions POST to the page URL with a Next-Action header rather
-        // than a dedicated API route. Intercept all POSTs to /checkout/payment
-        // that carry that header and stub them so tests don't need a real DB.
-        cy.intercept('POST', '/checkout/payment', (req) => {
-            if (req.headers['next-action']) {
-                req.reply({
-                    statusCode: 200,
-                    headers: { 'content-type': 'text/x-component' },
-                    // RSC flight encoding of: { success: true, orderId: TEST_ORDER_ID }
-                    body: `1:{"success":true,"orderId":"${TEST_ORDER_ID}"}`,
-                });
-            }
+        cy.intercept('POST', '/api/order', {
+            statusCode: 200,
+            body: { success: true, orderId: TEST_ORDER_ID },
         }).as('createOrder');
     });
 
